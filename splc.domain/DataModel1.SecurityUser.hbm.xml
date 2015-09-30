@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="SecurityUser" table="`User`" schema="Security">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="LastLoginDate" type="DateTime">
+      <column name="LastLoginDate" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="UserName" type="String">
+      <column name="UserName" not-null="true" length="256" sql-type="varchar" />
+    </property>
+    <property name="PassWord" type="String">
+      <column name="PassWord" not-null="true" length="25" sql-type="varchar" />
+    </property>
+    <property name="ActiveStatusId" type="Int32">
+      <column name="ActiveStatusId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="SecurityId" type="Int32">
+      <column name="SecurityId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="CreatedUserId" type="Int32">
+      <column name="CreatedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="ModifiedUserId" type="Int32">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="Disabled" type="Boolean">
+      <column name="Disabled" not-null="true" sql-type="bit" />
+    </property>
+    <many-to-one name="CommonPerson_PersonId" class="CommonPerson">
+      <column name="PersonId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUserType_UserTypeId" class="SecurityUserType">
+      <column name="UserTypeId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <set name="BeholderImageTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderImageType" />
+    </set>
+    <set name="BeholderImageTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderImageType" />
+    </set>
+    <set name="BeholderImageTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderImageType" />
+    </set>
+    <set name="BeholderOrganizationStatusHistories_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganizationStatusHistory" />
+    </set>
+    <set name="BeholderOrganizationStatusHistories_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganizationStatusHistory" />
+    </set>
+    <set name="BeholderOrganizationStatusHistories_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganizationStatusHistory" />
+    </set>
+    <set name="BeholderContactCompanyRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderContactCompanyRel" />
+    </set>
+    <set name="BeholderContactCompanyRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderContactCompanyRel" />
+    </set>
+    <set name="BeholderContactCompanyRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderContactCompanyRel" />
+    </set>
+    <set name="BeholderRenewalPermmisionTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderRenewalPermmisionType" />
+    </set>
+    <set name="BeholderRenewalPermmisionTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderRenewalPermmisionType" />
+    </set>
+    <set name="BeholderRenewalPermmisionTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderRenewalPermmisionType" />
+    </set>
+    <set name="BeholderContactChapterRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderContactChapterRel" />
+    </set>
+    <set name="BeholderContactChapterRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderContactChapterRel" />
+    </set>
+    <set name="BeholderContactChapterRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderContactChapterRel" />
+    </set>
+    <set name="BeholderPublishedTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderPublishedType" />
+    </set>
+    <set name="BeholderPublishedTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderPublishedType" />
+    </set>
+    <set name="BeholderPublishedTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderPublishedType" />
+    </set>
+    <set name="BeholderObjectTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderObjectType" />
+    </set>
+    <set name="BeholderObjectTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderObjectType" />
+    </set>
+    <set name="BeholderObjectTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderObjectType" />
+    </set>
+    <set name="BeholderNewsSourceTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderNewsSourceType" />
+    </set>
+    <set name="BeholderNewsSourceTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderNewsSourceType" />
+    </set>
+    <set name="BeholderNewsSourceTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderNewsSourceType" />
+    </set>
+    <set name="BeholderWebsiteGroupTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderWebsiteGroupType" />
+    </set>
+    <set name="BeholderWebsiteGroupTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderWebsiteGroupType" />
+    </set>
+    <set name="BeholderWebsiteGroupTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderWebsiteGroupType" />
+    </set>
+    <set name="BeholderVehicleTags_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderVehicleTag" />
+    </set>
+    <set name="BeholderVehicleTags_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderVehicleTag" />
+    </set>
+    <set name="BeholderVehicleTags_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderVehicleTag" />
+    </set>
+    <set name="BeholderSubscriptions_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderSubscription" />
+    </set>
+    <set name="BeholderSubscriptions_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderSubscription" />
+    </set>
+    <set name="BeholderSubscriptions_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderSubscription" />
+    </set>
+    <set name="BeholderAddressChapterRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressChapterRel" />
+    </set>
+    <set name="BeholderAddressChapterRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressChapterRel" />
+    </set>
+    <set name="BeholderAddressChapterRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressChapterRel" />
+    </set>
+    <set name="BeholderCompanies_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderCompany" />
+    </set>
+    <set name="BeholderCompanies_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderCompany" />
+    </set>
+    <set name="BeholderCompanies_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderCompany" />
+    </set>
+    <set name="BeholderChapters_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderChapter" />
+    </set>
+    <set name="BeholderChapters_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderChapter" />
+    </set>
+    <set name="BeholderChapters_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderChapter" />
+    </set>
+    <set name="BeholderBusinessClasses_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderBusinessClass" />
+    </set>
+    <set name="BeholderBusinessClasses_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderBusinessClass" />
+    </set>
+    <set name="BeholderBusinessClasses_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderBusinessClass" />
+    </set>
+    <set name="BeholderChapterTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterType" />
+    </set>
+    <set name="BeholderChapterTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterType" />
+    </set>
+    <set name="BeholderChapterTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterType" />
+    </set>
+    <set name="BeholderEventDocumentationTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderEventDocumentationType" />
+    </set>
+    <set name="BeholderEventDocumentationTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderEventDocumentationType" />
+    </set>
+    <set name="BeholderEventDocumentationTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderEventDocumentationType" />
+    </set>
+    <set name="BeholderContactTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderContactType" />
+    </set>
+    <set name="BeholderContactTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderContactType" />
+    </set>
+    <set name="BeholderContactTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderContactType" />
+    </set>
+    <set name="BeholderContactTopics_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderContactTopic" />
+    </set>
+    <set name="BeholderContactTopics_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderContactTopic" />
+    </set>
+    <set name="BeholderContactTopics_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderContactTopic" />
+    </set>
+    <set name="BeholderCompanyTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderCompanyType" />
+    </set>
+    <set name="BeholderCompanyTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderCompanyType" />
+    </set>
+    <set name="BeholderCompanyTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderCompanyType" />
+    </set>
+    <set name="BeholderEvents_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderEvent" />
+    </set>
+    <set name="BeholderEvents_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderEvent" />
+    </set>
+    <set name="BeholderEvents_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderEvent" />
+    </set>
+    <set name="BeholderOrganizations_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganization" />
+    </set>
+    <set name="BeholderOrganizations_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganization" />
+    </set>
+    <set name="BeholderOrganizations_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganization" />
+    </set>
+    <set name="BeholderVehicles_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderVehicle" />
+    </set>
+    <set name="BeholderVehicles_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderVehicle" />
+    </set>
+    <set name="BeholderVehicles_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderVehicle" />
+    </set>
+    <set name="BeholderWebIncidentTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderWebIncidentType" />
+    </set>
+    <set name="BeholderWebIncidentTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderWebIncidentType" />
+    </set>
+    <set name="BeholderWebIncidentTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderWebIncidentType" />
+    </set>
+    <set name="BeholderContacts_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderContact" />
+    </set>
+    <set name="BeholderContacts_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderContact" />
+    </set>
+    <set name="BeholderContacts_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderContact" />
+    </set>
+    <set name="BeholderMovementClasses_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderMovementClass" />
+    </set>
+    <set name="BeholderMovementClasses_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderMovementClass" />
+    </set>
+    <set name="BeholderMovementClasses_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderMovementClass" />
+    </set>
+    <set name="BeholderOrganizationTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganizationType" />
+    </set>
+    <set name="BeholderOrganizationTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganizationType" />
+    </set>
+    <set name="BeholderOrganizationTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderOrganizationType" />
+    </set>
+    <set name="BeholderApprovalStatus_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderApprovalStatus" />
+    </set>
+    <set name="BeholderApprovalStatus_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderApprovalStatus" />
+    </set>
+    <set name="BeholderApprovalStatus_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderApprovalStatus" />
+    </set>
+    <set name="BeholderConfidentialityTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderConfidentialityType" />
+    </set>
+    <set name="BeholderConfidentialityTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderConfidentialityType" />
+    </set>
+    <set name="BeholderConfidentialityTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderConfidentialityType" />
+    </set>
+    <set name="BeholderActiveStatus_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderActiveStatus" />
+    </set>
+    <set name="BeholderActiveStatus_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderActiveStatus" />
+    </set>
+    <set name="BeholderActiveStatus_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderActiveStatus" />
+    </set>
+    <set name="BeholderChapterPersonRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterPersonRel" />
+    </set>
+    <set name="BeholderChapterPersonRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterPersonRel" />
+    </set>
+    <set name="BeholderChapterPersonRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterPersonRel" />
+    </set>
+    <set name="BeholderChapterStatusHistories_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterStatusHistory" />
+    </set>
+    <set name="BeholderChapterStatusHistories_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterStatusHistory" />
+    </set>
+    <set name="BeholderChapterStatusHistories_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderChapterStatusHistory" />
+    </set>
+    <set name="BeholderAliasPersonRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasPersonRel" />
+    </set>
+    <set name="BeholderAliasPersonRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasPersonRel" />
+    </set>
+    <set name="BeholderAliasPersonRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasPersonRel" />
+    </set>
+    <set name="BeholderPersonScreenNames_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderPersonScreenName" />
+    </set>
+    <set name="BeholderPersonScreenNames_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderPersonScreenName" />
+    </set>
+    <set name="BeholderPersonScreenNames_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderPersonScreenName" />
+    </set>
+    <set name="BeholderPeople_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderPerson" />
+    </set>
+    <set name="BeholderPeople_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderPerson" />
+    </set>
+    <set name="BeholderPeople_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderPerson" />
+    </set>
+    <set name="BeholderAliasOrganizationRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasOrganizationRel" />
+    </set>
+    <set name="BeholderAliasOrganizationRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasOrganizationRel" />
+    </set>
+    <set name="BeholderAliasOrganizationRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasOrganizationRel" />
+    </set>
+    <set name="BeholderAliasCompanyRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasCompanyRel" />
+    </set>
+    <set name="BeholderAliasCompanyRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasCompanyRel" />
+    </set>
+    <set name="BeholderAliasCompanyRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasCompanyRel" />
+    </set>
+    <set name="BeholderAliasChapterRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasChapterRel" />
+    </set>
+    <set name="BeholderAliasChapterRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasChapterRel" />
+    </set>
+    <set name="BeholderAliasChapterRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAliasChapterRel" />
+    </set>
+    <set name="BeholderAddressSubscriptionsRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressSubscriptionsRel" />
+    </set>
+    <set name="BeholderAddressSubscriptionsRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressSubscriptionsRel" />
+    </set>
+    <set name="BeholderAddressSubscriptionsRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressSubscriptionsRel" />
+    </set>
+    <set name="BeholderAddressCompanyRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressCompanyRel" />
+    </set>
+    <set name="BeholderAddressCompanyRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressCompanyRel" />
+    </set>
+    <set name="BeholderAddressCompanyRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressCompanyRel" />
+    </set>
+    <set name="BeholderAddressVehicleTagRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressVehicleTagRel" />
+    </set>
+    <set name="BeholderAddressVehicleTagRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressVehicleTagRel" />
+    </set>
+    <set name="BeholderAddressVehicleTagRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAddressVehicleTagRel" />
+    </set>
+    <set name="BeholderEventTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderEventType" />
+    </set>
+    <set name="BeholderEventTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderEventType" />
+    </set>
+    <set name="BeholderEventTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderEventType" />
+    </set>
+    <set name="BeholderAudioVideoTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderAudioVideoType" />
+    </set>
+    <set name="BeholderAudioVideoTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderAudioVideoType" />
+    </set>
+    <set name="BeholderAudioVideoTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderAudioVideoType" />
+    </set>
+    <set name="BeholderCorrespondenceTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderCorrespondenceType" />
+    </set>
+    <set name="BeholderCorrespondenceTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderCorrespondenceType" />
+    </set>
+    <set name="BeholderCorrespondenceTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderCorrespondenceType" />
+    </set>
+    <set name="BeholderMediaTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="BeholderMediaType" />
+    </set>
+    <set name="BeholderMediaTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="BeholderMediaType" />
+    </set>
+    <set name="BeholderMediaTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="BeholderMediaType" />
+    </set>
+    <set name="CommonSuffixes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonSuffix" />
+    </set>
+    <set name="CommonSuffixes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonSuffix" />
+    </set>
+    <set name="CommonSuffixes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonSuffix" />
+    </set>
+    <set name="CommonPrefixes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonPrefix" />
+    </set>
+    <set name="CommonPrefixes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonPrefix" />
+    </set>
+    <set name="CommonPrefixes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonPrefix" />
+    </set>
+    <set name="CommonReligions_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonReligion" />
+    </set>
+    <set name="CommonReligions_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonReligion" />
+    </set>
+    <set name="CommonReligions_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonReligion" />
+    </set>
+    <set name="CommonContactTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonContactType" />
+    </set>
+    <set name="CommonContactTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonContactType" />
+    </set>
+    <set name="CommonContactTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonContactType" />
+    </set>
+    <set name="CommonPeople_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonPerson" />
+    </set>
+    <set name="CommonPeople_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonPerson" />
+    </set>
+    <set name="CommonPeople_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonPerson" />
+    </set>
+    <set name="CommonAddressTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonAddressType" />
+    </set>
+    <set name="CommonAddressTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonAddressType" />
+    </set>
+    <set name="CommonAddressTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonAddressType" />
+    </set>
+    <set name="CommonStates_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonState" />
+    </set>
+    <set name="CommonStates_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonState" />
+    </set>
+    <set name="CommonAddresses_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonAddress" />
+    </set>
+    <set name="CommonAddresses_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonAddress" />
+    </set>
+    <set name="CommonAddresses_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonAddress" />
+    </set>
+    <set name="CommonAliases_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonAlias" />
+    </set>
+    <set name="CommonAliases_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonAlias" />
+    </set>
+    <set name="CommonAliases_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonAlias" />
+    </set>
+    <set name="CommonTagTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonTagType" />
+    </set>
+    <set name="CommonTagTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonTagType" />
+    </set>
+    <set name="CommonTagTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonTagType" />
+    </set>
+    <set name="CommonVehicleTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleType" />
+    </set>
+    <set name="CommonVehicleTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleType" />
+    </set>
+    <set name="CommonVehicleTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleType" />
+    </set>
+    <set name="CommonVehicleModels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleModel" />
+    </set>
+    <set name="CommonVehicleModels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleModel" />
+    </set>
+    <set name="CommonVehicleModels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleModel" />
+    </set>
+    <set name="CommonVehicleMakes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleMake" />
+    </set>
+    <set name="CommonVehicleMakes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleMake" />
+    </set>
+    <set name="CommonVehicleMakes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleMake" />
+    </set>
+    <set name="CommonVehicleColors_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleColor" />
+    </set>
+    <set name="CommonVehicleColors_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleColor" />
+    </set>
+    <set name="CommonVehicleColors_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonVehicleColor" />
+    </set>
+    <set name="CommonRaces_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonRace" />
+    </set>
+    <set name="CommonRaces_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonRace" />
+    </set>
+    <set name="CommonRaces_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonRace" />
+    </set>
+    <set name="CommonMaritialStatus_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonMaritialStatus" />
+    </set>
+    <set name="CommonMaritialStatus_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonMaritialStatus" />
+    </set>
+    <set name="CommonMaritialStatus_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonMaritialStatus" />
+    </set>
+    <set name="CommonLicenseTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonLicenseType" />
+    </set>
+    <set name="CommonLicenseTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonLicenseType" />
+    </set>
+    <set name="CommonLicenseTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonLicenseType" />
+    </set>
+    <set name="CommonHairPatterns_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonHairPattern" />
+    </set>
+    <set name="CommonHairPatterns_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonHairPattern" />
+    </set>
+    <set name="CommonHairPatterns_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonHairPattern" />
+    </set>
+    <set name="CommonHairColors_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonHairColor" />
+    </set>
+    <set name="CommonHairColors_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonHairColor" />
+    </set>
+    <set name="CommonHairColors_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonHairColor" />
+    </set>
+    <set name="CommonGenders_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonGender" />
+    </set>
+    <set name="CommonGenders_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonGender" />
+    </set>
+    <set name="CommonGenders_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonGender" />
+    </set>
+    <set name="CommonEyeColors_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonEyeColor" />
+    </set>
+    <set name="CommonEyeColors_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonEyeColor" />
+    </set>
+    <set name="CommonEyeColors_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonEyeColor" />
+    </set>
+    <set name="CommonAddressPersonRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonAddressPersonRel" />
+    </set>
+    <set name="CommonAddressPersonRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonAddressPersonRel" />
+    </set>
+    <set name="CommonAddressPersonRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonAddressPersonRel" />
+    </set>
+    <set name="CommonContactPersonRels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonContactPersonRel" />
+    </set>
+    <set name="CommonContactPersonRels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonContactPersonRel" />
+    </set>
+    <set name="CommonContactPersonRels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonContactPersonRel" />
+    </set>
+    <set name="CommonCompanyTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonCompanyType" />
+    </set>
+    <set name="CommonCompanyTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonCompanyType" />
+    </set>
+    <set name="CommonCompanyTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonCompanyType" />
+    </set>
+    <set name="CommonMotorcycleModels_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonMotorcycleModel" />
+    </set>
+    <set name="CommonMotorcycleModels_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonMotorcycleModel" />
+    </set>
+    <set name="CommonMotorcycleModels_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonMotorcycleModel" />
+    </set>
+    <set name="CommonMotorcycleMakes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="CommonMotorcycleMake" />
+    </set>
+    <set name="CommonMotorcycleMakes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="CommonMotorcycleMake" />
+    </set>
+    <set name="CommonMotorcycleMakes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="CommonMotorcycleMake" />
+    </set>
+    <set name="SecurityUserTypes_CreatedUserId" inverse="true" generic="false">
+      <key>
+        <column name="CreatedUserId" />
+      </key>
+      <one-to-many class="SecurityUserType" />
+    </set>
+    <set name="SecurityUserTypes_DeletedUserId" inverse="true" generic="false">
+      <key>
+        <column name="DeletedUserId" />
+      </key>
+      <one-to-many class="SecurityUserType" />
+    </set>
+    <set name="SecurityUserTypes_ModifiedUserId" inverse="true" generic="false">
+      <key>
+        <column name="ModifiedUserId" />
+      </key>
+      <one-to-many class="SecurityUserType" />
+    </set>
+  </class>
+</hibernate-mapping>

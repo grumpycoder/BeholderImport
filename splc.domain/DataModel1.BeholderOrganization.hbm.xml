@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="BeholderOrganization" table="Organization" schema="Beholder">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="OrganizationName" type="String">
+      <column name="OrganizationName" not-null="true" length="100" sql-type="varchar" />
+    </property>
+    <property name="OrganizationDesc" type="String">
+      <column name="OrganizationDesc" not-null="false" length="256" sql-type="varchar" />
+    </property>
+    <property name="ActiveYear" type="Int32">
+      <column name="ActiveYear" not-null="true" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="ReportStatusFlag" type="Boolean">
+      <column name="ReportStatusFlag" not-null="true" sql-type="bit" />
+    </property>
+    <property name="FormedDate" type="DateTime">
+      <column name="FormedDate" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DisbandDate" type="DateTime">
+      <column name="DisbandDate" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="Comments" type="String">
+      <column name="Comments" not-null="false" sql-type="varchar" />
+    </property>
+    <many-to-one name="BeholderActiveStatus" class="BeholderActiveStatus">
+      <column name="ActiveStatusId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="BeholderApprovalStatus" class="BeholderApprovalStatus">
+      <column name="ApprovalStatusId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="BeholderConfidentialityType" class="BeholderConfidentialityType">
+      <column name="ConfidentialityTypeId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="BeholderMovementClass" class="BeholderMovementClass">
+      <column name="MovementClassId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="BeholderOrganizationType" class="BeholderOrganizationType">
+      <column name="OrganizationTypeId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_CreatedUserId" class="SecurityUser">
+      <column name="CreatedUserId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_DeletedUserId" class="SecurityUser">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_ModifiedUserId" class="SecurityUser">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <set name="BeholderOrganizationStatusHistories" inverse="true" generic="false">
+      <key>
+        <column name="OrganizationId" />
+      </key>
+      <one-to-many class="BeholderOrganizationStatusHistory" />
+    </set>
+    <set name="BeholderChapters" inverse="true" generic="false">
+      <key>
+        <column name="OrganizationId" />
+      </key>
+      <one-to-many class="BeholderChapter" />
+    </set>
+    <set name="BeholderAliasOrganizationRels" inverse="true" generic="false">
+      <key>
+        <column name="OrganizationId" />
+      </key>
+      <one-to-many class="BeholderAliasOrganizationRel" />
+    </set>
+  </class>
+</hibernate-mapping>

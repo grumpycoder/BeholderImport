@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="BeholderAddressCompanyRel" table="AddressCompanyRel" schema="Beholder">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="FirstKnownUseDate" type="DateTime">
+      <column name="FirstKnownUseDate" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="LastKNownUsedate" type="DateTime">
+      <column name="LastKNownUsedate" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="Comments" type="String">
+      <column name="Comments" not-null="false" sql-type="varchar" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <many-to-one name="BeholderCompany" class="BeholderCompany">
+      <column name="CompanyId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonAddress" class="CommonAddress">
+      <column name="AddressId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonAddressType" class="CommonAddressType">
+      <column name="AddressTypeId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_CreatedUserId" class="SecurityUser">
+      <column name="CreatedUserId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_DeletedUserId" class="SecurityUser">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_ModifiedUserId" class="SecurityUser">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonPrimaryStatus" class="CommonPrimaryStatus">
+      <column name="PrimaryStatusId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>

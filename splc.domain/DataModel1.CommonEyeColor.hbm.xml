@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="CommonEyeColor" table="EyeColor" schema="Common">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="Name" type="String">
+      <column name="Name" not-null="true" length="100" sql-type="varchar" />
+    </property>
+    <property name="SortOrder" type="Int32">
+      <column name="SortOrder" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <many-to-one name="SecurityUser_CreatedUserId" class="SecurityUser">
+      <column name="CreatedUserId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_DeletedUserId" class="SecurityUser">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_ModifiedUserId" class="SecurityUser">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <set name="CommonPeople" inverse="true" generic="false">
+      <key>
+        <column name="EyeColorId" />
+      </key>
+      <one-to-many class="CommonPerson" />
+    </set>
+  </class>
+</hibernate-mapping>

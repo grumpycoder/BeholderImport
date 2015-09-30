@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="BeholderPerson" table="Person" schema="Beholder">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="DistinguishableMarks" type="String">
+      <column name="DistinguishableMarks" not-null="false" length="1012" sql-type="varchar" />
+    </property>
+    <property name="Comments" type="String">
+      <column name="Comments" not-null="false" sql-type="varchar" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <many-to-one name="BeholderMovementClass" class="BeholderMovementClass">
+      <column name="MovementClassId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="BeholderConfidentialityType" class="BeholderConfidentialityType">
+      <column name="ConfidentialityTypeId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_CreatedUserId" class="SecurityUser">
+      <column name="CreatedUserId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_DeletedUserId" class="SecurityUser">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_ModifiedUserId" class="SecurityUser">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonPerson" class="CommonPerson">
+      <column name="PersonId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <set name="BeholderChapterPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="BeholderChapterPersonRel" />
+    </set>
+    <set name="BeholderAliasPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="BeholderAliasPersonRel" />
+    </set>
+    <set name="BeholderPersonScreenNames" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="BeholderPersonScreenName" />
+    </set>
+  </class>
+</hibernate-mapping>

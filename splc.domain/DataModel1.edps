@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDeveloper Version="5.0.9.0">
+  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ConnectionStringInAppConfig="False">
+    <Connection ConnectionString="Data Source=Kremenski;Initial Catalog=ACDB;Integrated Security=True;Persist Security Info=True" Provider="System.Data.SqlClient" />
+    <Generation>
+      <GeneratedFiles>
+        <File Name="DataModel1.BeholderImageType.cs" />
+        <File Name="DataModel1.BeholderOrganizationStatusHistory.cs" />
+        <File Name="DataModel1.BeholderContactCompanyRel.cs" />
+        <File Name="DataModel1.BeholderRenewalPermmisionType.cs" />
+        <File Name="DataModel1.BeholderContactChapterRel.cs" />
+        <File Name="DataModel1.BeholderPublishedType.cs" />
+        <File Name="DataModel1.BeholderObjectType.cs" />
+        <File Name="DataModel1.BeholderNewsSourceType.cs" />
+        <File Name="DataModel1.BeholderWebsiteGroupType.cs" />
+        <File Name="DataModel1.BeholderVehicleTag.cs" />
+        <File Name="DataModel1.BeholderSubscription.cs" />
+        <File Name="DataModel1.BeholderAddressChapterRel.cs" />
+        <File Name="DataModel1.BeholderCompany.cs" />
+        <File Name="DataModel1.BeholderChapter.cs" />
+        <File Name="DataModel1.BeholderBusinessClass.cs" />
+        <File Name="DataModel1.BeholderChapterType.cs" />
+        <File Name="DataModel1.BeholderEventDocumentationType.cs" />
+        <File Name="DataModel1.BeholderContactType.cs" />
+        <File Name="DataModel1.BeholderContactTopic.cs" />
+        <File Name="DataModel1.BeholderAddressEventRel.cs" />
+        <File Name="DataModel1.BeholderCompanyType.cs" />
+        <File Name="DataModel1.BeholderEvent.cs" />
+        <File Name="DataModel1.BeholderOrganization.cs" />
+        <File Name="DataModel1.BeholderVehicle.cs" />
+        <File Name="DataModel1.BeholderWebIncidentType.cs" />
+        <File Name="DataModel1.BeholderAddressContactRel.cs" />
+        <File Name="DataModel1.BeholderContact.cs" />
+        <File Name="DataModel1.BeholderMovementClass.cs" />
+        <File Name="DataModel1.BeholderOrganizationType.cs" />
+        <File Name="DataModel1.BeholderApprovalStatus.cs" />
+        <File Name="DataModel1.BeholderConfidentialityType.cs" />
+        <File Name="DataModel1.BeholderActiveStatus.cs" />
+        <File Name="DataModel1.BeholderChapterPersonRel.cs" />
+        <File Name="DataModel1.BeholderChapterStatusHistory.cs" />
+        <File Name="DataModel1.BeholderAliasPersonRel.cs" />
+        <File Name="DataModel1.BeholderPersonScreenName.cs" />
+        <File Name="DataModel1.BeholderPerson.cs" />
+        <File Name="DataModel1.BeholderAliasOrganizationRel.cs" />
+        <File Name="DataModel1.BeholderAliasCompanyRel.cs" />
+        <File Name="DataModel1.BeholderAliasChapterRel.cs" />
+        <File Name="DataModel1.BeholderAddressSubscriptionsRel.cs" />
+        <File Name="DataModel1.BeholderAddressCompanyRel.cs" />
+        <File Name="DataModel1.BeholderAddressVehicleTagRel.cs" />
+        <File Name="DataModel1.BeholderEventType.cs" />
+        <File Name="DataModel1.BeholderAudioVideoType.cs" />
+        <File Name="DataModel1.BeholderCorrespondenceType.cs" />
+        <File Name="DataModel1.BeholderMediaType.cs" />
+        <File Name="DataModel1.CommonSuffix.cs" />
+        <File Name="DataModel1.CommonPrefix.cs" />
+        <File Name="DataModel1.CommonReligion.cs" />
+        <File Name="DataModel1.CommonContactType.cs" />
+        <File Name="DataModel1.CommonPrimaryStatus.cs" />
+        <File Name="DataModel1.CommonPerson.cs" />
+        <File Name="DataModel1.CommonAddressType.cs" />
+        <File Name="DataModel1.CommonState.cs" />
+        <File Name="DataModel1.CommonAddress.cs" />
+        <File Name="DataModel1.CommonAlias.cs" />
+        <File Name="DataModel1.CommonTagType.cs" />
+        <File Name="DataModel1.CommonVehicleType.cs" />
+        <File Name="DataModel1.CommonVehicleModel.cs" />
+        <File Name="DataModel1.CommonVehicleMake.cs" />
+        <File Name="DataModel1.CommonVehicleColor.cs" />
+        <File Name="DataModel1.CommonRace.cs" />
+        <File Name="DataModel1.CommonMaritialStatus.cs" />
+        <File Name="DataModel1.CommonLicenseType.cs" />
+        <File Name="DataModel1.CommonHairPattern.cs" />
+        <File Name="DataModel1.CommonContact.cs" />
+        <File Name="DataModel1.CommonHairColor.cs" />
+        <File Name="DataModel1.CommonGender.cs" />
+        <File Name="DataModel1.CommonEyeColor.cs" />
+        <File Name="DataModel1.CommonAddressPersonRel.cs" />
+        <File Name="DataModel1.CommonContactPersonRel.cs" />
+        <File Name="DataModel1.CommonCompanyType.cs" />
+        <File Name="DataModel1.CommonMotorcycleModel.cs" />
+        <File Name="DataModel1.CommonMotorcycleMake.cs" />
+        <File Name="DataModel1.SecurityUserType.cs" />
+        <File Name="DataModel1.SecurityUser.cs" />
+        <File Name="DataModel1.BeholderImageType.hbm.xml" />
+        <File Name="DataModel1.BeholderOrganizationStatusHistory.hbm.xml" />
+        <File Name="DataModel1.BeholderContactCompanyRel.hbm.xml" />
+        <File Name="DataModel1.BeholderRenewalPermmisionType.hbm.xml" />
+        <File Name="DataModel1.BeholderContactChapterRel.hbm.xml" />
+        <File Name="DataModel1.BeholderPublishedType.hbm.xml" />
+        <File Name="DataModel1.BeholderObjectType.hbm.xml" />
+        <File Name="DataModel1.BeholderNewsSourceType.hbm.xml" />
+        <File Name="DataModel1.BeholderWebsiteGroupType.hbm.xml" />
+        <File Name="DataModel1.BeholderVehicleTag.hbm.xml" />
+        <File Name="DataModel1.BeholderSubscription.hbm.xml" />
+        <File Name="DataModel1.BeholderAddressChapterRel.hbm.xml" />
+        <File Name="DataModel1.BeholderCompany.hbm.xml" />
+        <File Name="DataModel1.BeholderChapter.hbm.xml" />
+        <File Name="DataModel1.BeholderBusinessClass.hbm.xml" />
+        <File Name="DataModel1.BeholderChapterType.hbm.xml" />
+        <File Name="DataModel1.BeholderEventDocumentationType.hbm.xml" />
+        <File Name="DataModel1.BeholderContactType.hbm.xml" />
+        <File Name="DataModel1.BeholderContactTopic.hbm.xml" />
+        <File Name="DataModel1.BeholderAddressEventRel.hbm.xml" />
+        <File Name="DataModel1.BeholderCompanyType.hbm.xml" />
+        <File Name="DataModel1.BeholderEvent.hbm.xml" />
+        <File Name="DataModel1.BeholderOrganization.hbm.xml" />
+        <File Name="DataModel1.BeholderVehicle.hbm.xml" />
+        <File Name="DataModel1.BeholderWebIncidentType.hbm.xml" />
+        <File Name="DataModel1.BeholderAddressContactRel.hbm.xml" />
+        <File Name="DataModel1.BeholderContact.hbm.xml" />
+        <File Name="DataModel1.BeholderMovementClass.hbm.xml" />
+        <File Name="DataModel1.BeholderOrganizationType.hbm.xml" />
+        <File Name="DataModel1.BeholderApprovalStatus.hbm.xml" />
+        <File Name="DataModel1.BeholderConfidentialityType.hbm.xml" />
+        <File Name="DataModel1.BeholderActiveStatus.hbm.xml" />
+        <File Name="DataModel1.BeholderChapterPersonRel.hbm.xml" />
+        <File Name="DataModel1.BeholderChapterStatusHistory.hbm.xml" />
+        <File Name="DataModel1.BeholderAliasPersonRel.hbm.xml" />
+        <File Name="DataModel1.BeholderPersonScreenName.hbm.xml" />
+        <File Name="DataModel1.BeholderPerson.hbm.xml" />
+        <File Name="DataModel1.BeholderAliasOrganizationRel.hbm.xml" />
+        <File Name="DataModel1.BeholderAliasCompanyRel.hbm.xml" />
+        <File Name="DataModel1.BeholderAliasChapterRel.hbm.xml" />
+        <File Name="DataModel1.BeholderAddressSubscriptionsRel.hbm.xml" />
+        <File Name="DataModel1.BeholderAddressCompanyRel.hbm.xml" />
+        <File Name="DataModel1.BeholderAddressVehicleTagRel.hbm.xml" />
+        <File Name="DataModel1.BeholderEventType.hbm.xml" />
+        <File Name="DataModel1.BeholderAudioVideoType.hbm.xml" />
+        <File Name="DataModel1.BeholderCorrespondenceType.hbm.xml" />
+        <File Name="DataModel1.BeholderMediaType.hbm.xml" />
+        <File Name="DataModel1.CommonSuffix.hbm.xml" />
+        <File Name="DataModel1.CommonPrefix.hbm.xml" />
+        <File Name="DataModel1.CommonReligion.hbm.xml" />
+        <File Name="DataModel1.CommonContactType.hbm.xml" />
+        <File Name="DataModel1.CommonPrimaryStatus.hbm.xml" />
+        <File Name="DataModel1.CommonPerson.hbm.xml" />
+        <File Name="DataModel1.CommonAddressType.hbm.xml" />
+        <File Name="DataModel1.CommonState.hbm.xml" />
+        <File Name="DataModel1.CommonAddress.hbm.xml" />
+        <File Name="DataModel1.CommonAlias.hbm.xml" />
+        <File Name="DataModel1.CommonTagType.hbm.xml" />
+        <File Name="DataModel1.CommonVehicleType.hbm.xml" />
+        <File Name="DataModel1.CommonVehicleModel.hbm.xml" />
+        <File Name="DataModel1.CommonVehicleMake.hbm.xml" />
+        <File Name="DataModel1.CommonVehicleColor.hbm.xml" />
+        <File Name="DataModel1.CommonRace.hbm.xml" />
+        <File Name="DataModel1.CommonMaritialStatus.hbm.xml" />
+        <File Name="DataModel1.CommonLicenseType.hbm.xml" />
+        <File Name="DataModel1.CommonHairPattern.hbm.xml" />
+        <File Name="DataModel1.CommonContact.hbm.xml" />
+        <File Name="DataModel1.CommonHairColor.hbm.xml" />
+        <File Name="DataModel1.CommonGender.hbm.xml" />
+        <File Name="DataModel1.CommonEyeColor.hbm.xml" />
+        <File Name="DataModel1.CommonAddressPersonRel.hbm.xml" />
+        <File Name="DataModel1.CommonContactPersonRel.hbm.xml" />
+        <File Name="DataModel1.CommonCompanyType.hbm.xml" />
+        <File Name="DataModel1.CommonMotorcycleModel.hbm.xml" />
+        <File Name="DataModel1.CommonMotorcycleMake.hbm.xml" />
+        <File Name="DataModel1.SecurityUserType.hbm.xml" />
+        <File Name="DataModel1.SecurityUser.hbm.xml" />
+      </GeneratedFiles>
+    </Generation>
+    <generator class="identity" />
+    <DatabaseFirstNamingRules>
+      <EntitySet PluralizationName="Pluralize" />
+      <Class UseSchemaAsPrefix="True" PluralizeCollectionNavigationPropertyName="True" RemoveUnderscores="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="DataModel1." RemoveSuffixes="" PluralizationName="Unchanged" />
+      <Property RemoveUnderscores="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="DataModel1." RemoveSuffixes="" PluralizationName="Unchanged" />
+    </DatabaseFirstNamingRules>
+    <ModelFirst StorageSynchronizationEnabled="False" TargetProviderName="System.Data.SqlClient">
+      <TargetServer Server="SQL Server" ServerVersion="Azure" />
+      <ModelFirstNamingRules>
+        <Table RemoveUnderscores="False" CodeCase="Unchanged" AddPrefix="" AddSuffix="" RemovePrefixes="DataModel1." RemoveSuffixes="" PluralizationName="Unchanged" />
+        <Column RemoveUnderscores="False" CodeCase="Unchanged" AddPrefix="" AddSuffix="" RemovePrefixes="DataModel1." RemoveSuffixes="" PluralizationName="Unchanged" />
+      </ModelFirstNamingRules>
+    </ModelFirst>
+    <Diagrams>
+      <Diagram Name="Diagram1" DefaultDiagram="True" />
+    </Diagrams>
+    <Templates>
+      <Template Name="NHibernate" Description="NHibernate template for Devart Entity Developer C# code generation." Enabled="True" PredefinedTemplateName="NHibernate C#">
+        <ed:Property Name="ValidationFramework" Type="EntityDeveloper.TemplateEngine.ValidationFramework, EntityDeveloper.Common, Version=5.0.9.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <ValidationFramework>None</ValidationFramework>
+        </ed:Property>
+        <ed:Property Name="ValidationErrorMessages" Type="EntityDeveloper.TemplateEngine.ValidationErrorMessages, EntityDeveloper.Common, Version=5.0.9.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <ValidationErrorMessages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </ed:Property>
+        <ed:Property Name="FilePerClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="HeaderTimestampVersionControlTag" Type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <string d6p1:nil="true" xmlns:d6p1="http://www.w3.org/2001/XMLSchema-instance" />
+        </ed:Property>
+        <ed:Property Name="EntitiesOutput" Type="EntityDeveloper.TemplateEngine.OutputInfo, EntityDeveloper.Common, Version=5.0.9.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <OutputInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Project />
+            <ProjectFolder />
+            <DestinationFolder />
+          </OutputInfo>
+        </ed:Property>
+        <ed:Property Name="PropertyChangeNotifiers" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="PropertyChangePartialMethods" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="ImplementValidatable" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="ImplementEquals" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="ImplementCloneable" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="GeneratePartialClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="GenerateDataContracts" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="XmlMappingOutput" Type="EntityDeveloper.TemplateEngine.OutputInfo, EntityDeveloper.Common, Version=5.0.9.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <OutputInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Project />
+            <ProjectFolder />
+            <DestinationFolder />
+          </OutputInfo>
+        </ed:Property>
+        <ed:Property Name="XmlMappingAction" Type="EntityDeveloper.MetadataArtifactProcessing, EntityDeveloper.Orm.Common, Version=5.0.9.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <MetadataArtifactProcessing>EmbedInOutputAssembly</MetadataArtifactProcessing>
+        </ed:Property>
+        <ed:Property Name="XmlMappingFilePerClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+      </Template>
+    </Templates>
+    <AttributeAssemblies />
+    <Configuration SeparateConfigFile="False" />
+  </ModelSettings>
+</EntityDeveloper>

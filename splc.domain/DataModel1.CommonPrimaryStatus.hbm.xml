@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="CommonPrimaryStatus" table="PrimaryStatus" schema="Common">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="Name" type="String">
+      <column name="Name" not-null="true" length="100" sql-type="varchar" />
+    </property>
+    <property name="SortOrder" type="Int32">
+      <column name="SortOrder" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="CreatedUserId" type="Int32">
+      <column name="CreatedUserId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="ModifiedUserId" type="Int32">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DeletedUserId" type="Int32">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <set name="BeholderContactCompanyRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderContactCompanyRel" />
+    </set>
+    <set name="BeholderContactChapterRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderContactChapterRel" />
+    </set>
+    <set name="BeholderAddressChapterRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAddressChapterRel" />
+    </set>
+    <set name="BeholderAddressEventRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAddressEventRel" />
+    </set>
+    <set name="BeholderAddressContactRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAddressContactRel" />
+    </set>
+    <set name="BeholderAliasPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAliasPersonRel" />
+    </set>
+    <set name="BeholderPersonScreenNames" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderPersonScreenName" />
+    </set>
+    <set name="BeholderAliasOrganizationRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAliasOrganizationRel" />
+    </set>
+    <set name="BeholderAliasCompanyRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAliasCompanyRel" />
+    </set>
+    <set name="BeholderAliasChapterRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAliasChapterRel" />
+    </set>
+    <set name="BeholderAddressSubscriptionsRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAddressSubscriptionsRel" />
+    </set>
+    <set name="BeholderAddressCompanyRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAddressCompanyRel" />
+    </set>
+    <set name="BeholderAddressVehicleTagRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="BeholderAddressVehicleTagRel" />
+    </set>
+    <set name="CommonAddressPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="PrimaryStatusId" />
+      </key>
+      <one-to-many class="CommonAddressPersonRel" />
+    </set>
+  </class>
+</hibernate-mapping>

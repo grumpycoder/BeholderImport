@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="CommonPerson" table="Person" schema="Common">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="SSN" type="String">
+      <column name="SSN" not-null="false" length="9" sql-type="char" />
+    </property>
+    <property name="FName" type="String">
+      <column name="FName" not-null="false" length="256" sql-type="varchar" />
+    </property>
+    <property name="MName" type="String">
+      <column name="MName" not-null="false" length="256" sql-type="varchar" />
+    </property>
+    <property name="LName" type="String">
+      <column name="LName" not-null="true" length="256" sql-type="varchar" />
+    </property>
+    <property name="DOB" type="DateTime">
+      <column name="DOB" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="ActualDOBIndicator" type="Boolean">
+      <column name="ActualDOBIndicator" not-null="false" sql-type="bit" />
+    </property>
+    <property name="DriversLicenseNumber" type="String">
+      <column name="DriversLicenseNumber" not-null="false" length="125" sql-type="varchar" />
+    </property>
+    <property name="DeceasedDate" type="DateTime">
+      <column name="DeceasedDate" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="ActualDeceasedDateIndicator" type="Boolean">
+      <column name="ActualDeceasedDateIndicator" not-null="false" sql-type="bit" />
+    </property>
+    <property name="Height" type="String">
+      <column name="Height" not-null="false" length="20" sql-type="varchar" />
+    </property>
+    <property name="Weight" type="String">
+      <column name="Weight" not-null="false" length="20" sql-type="varchar" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="OldId" type="Int32">
+      <column name="OldId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <many-to-one name="CommonSuffix" class="CommonSuffix">
+      <column name="SuffixId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonPrefix" class="CommonPrefix">
+      <column name="PrefixId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonEyeColor" class="CommonEyeColor">
+      <column name="EyeColorId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonGender" class="CommonGender">
+      <column name="GenderId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonHairColor" class="CommonHairColor">
+      <column name="HairColorId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonHairPattern" class="CommonHairPattern">
+      <column name="HairPatternId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonLicenseType" class="CommonLicenseType">
+      <column name="LicenseTypeId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonMaritialStatus" class="CommonMaritialStatus">
+      <column name="MartialStatusId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonRace" class="CommonRace">
+      <column name="RaceId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="CommonState" class="CommonState">
+      <column name="DriversLicenseStateId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_CreatedUserId" class="SecurityUser">
+      <column name="CreatedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_DeletedUserId" class="SecurityUser">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <many-to-one name="SecurityUser_ModifiedUserId" class="SecurityUser">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </many-to-one>
+    <set name="BeholderContacts" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="BeholderContact" />
+    </set>
+    <set name="BeholderPeople" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="BeholderPerson" />
+    </set>
+    <set name="CommonAddressPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="CommonAddressPersonRel" />
+    </set>
+    <set name="CommonContactPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="CommonContactPersonRel" />
+    </set>
+    <set name="SecurityUsers_PersonId" inverse="true" generic="false">
+      <key>
+        <column name="PersonId" />
+      </key>
+      <one-to-many class="SecurityUser" />
+    </set>
+  </class>
+</hibernate-mapping>

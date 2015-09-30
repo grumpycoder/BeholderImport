@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="splc.domain" namespace="splc.domain" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="CommonContact" table="Contact" schema="Common">
+    <id name="Id" type="Int32">
+      <column name="Id" not-null="true" precision="10" scale="0" sql-type="int" />
+      <generator class="identity" />
+    </id>
+    <property name="Contact" type="String">
+      <column name="Contact" not-null="true" length="256" sql-type="varchar" />
+    </property>
+    <property name="Extension" type="String">
+      <column name="Extension" not-null="false" length="5" sql-type="varchar" />
+    </property>
+    <property name="DateCreated" type="DateTime">
+      <column name="DateCreated" default="getdate()" not-null="true" sql-type="datetime2" />
+    </property>
+    <property name="CreatedUserId" type="Int32">
+      <column name="CreatedUserId" not-null="true" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateModified" type="DateTime">
+      <column name="DateModified" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="ModifiedUserId" type="Int32">
+      <column name="ModifiedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <property name="DateDeleted" type="DateTime">
+      <column name="DateDeleted" not-null="false" sql-type="datetime2" />
+    </property>
+    <property name="DeletedUserId" type="Int32">
+      <column name="DeletedUserId" not-null="false" precision="10" scale="0" sql-type="int" />
+    </property>
+    <set name="BeholderContactCompanyRels" inverse="true" generic="false">
+      <key>
+        <column name="ContactId" />
+      </key>
+      <one-to-many class="BeholderContactCompanyRel" />
+    </set>
+    <set name="BeholderContactChapterRels" inverse="true" generic="false">
+      <key>
+        <column name="ContactId" />
+      </key>
+      <one-to-many class="BeholderContactChapterRel" />
+    </set>
+    <set name="CommonContactPersonRels" inverse="true" generic="false">
+      <key>
+        <column name="ContactId" />
+      </key>
+      <one-to-many class="CommonContactPersonRel" />
+    </set>
+  </class>
+</hibernate-mapping>

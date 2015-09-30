@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1B01921-9073-44B9-890E-948BDC9DF72D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>splc.domain</RootNamespace>
+    <AssemblyName>splc.domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Stage|AnyCPU'">
+    <OutputPath>bin\Stage\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ACDBContext.cs" />
+    <Compile Include="ApplicationUser.cs" />
+    <Compile Include="Migrations\201509251512409_initial.cs" />
+    <Compile Include="Migrations\201509251512409_initial.Designer.cs">
+      <DependentUpon>201509251512409_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509251537073_datatypeconversion.cs" />
+    <Compile Include="Migrations\201509251537073_datatypeconversion.Designer.cs">
+      <DependentUpon>201509251537073_datatypeconversion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509270225231_ChapterTableChange.cs" />
+    <Compile Include="Migrations\201509270225231_ChapterTableChange.Designer.cs">
+      <DependentUpon>201509270225231_ChapterTableChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AddressContactRel.cs" />
+    <Compile Include="Models\AddressEventRel.cs" />
+    <Compile Include="Models\AddressSubscriptionsRel.cs" />
+    <Compile Include="Models\AudioVideoType.cs" />
+    <Compile Include="Models\ChapterChapterRel.cs" />
+    <Compile Include="Models\ChapterContactRel.cs" />
+    <Compile Include="Models\ChapterMediaAudioVideoRel.cs" />
+    <Compile Include="Models\ChapterMediaCorrespondenceRel.cs" />
+    <Compile Include="Models\ChapterMediaImageRel.cs" />
+    <Compile Include="Models\ChapterComment.cs" />
+    <Compile Include="Models\ChapterEventRel.cs" />
+    <Compile Include="Models\ChapterContactInfoRel.cs" />
+    <Compile Include="Models\ChapterMediaPublishedRel.cs" />
+    <Compile Include="Models\ChapterMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\ChapterReport.cs" />
+    <Compile Include="Models\ChapterStatusHistory.cs" />
+    <Compile Include="Models\ChapterSubscriptionRel.cs" />
+    <Compile Include="Models\ChapterVehicleRel.cs" />
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\ContactComment.cs" />
+    <Compile Include="Models\ContactContactRel.cs" />
+    <Compile Include="Models\ContactMediaCorrespondenceRel.cs" />
+    <Compile Include="Models\ContactMediaImageRel.cs" />
+    <Compile Include="Models\ContactSubscriptionRel.cs" />
+    <Compile Include="Models\ContactTopic.cs" />
+    <Compile Include="Models\ContactType.cs" />
+    <Compile Include="Models\EventReport.cs" />
+    <Compile Include="Models\EventType.cs" />
+    <Compile Include="Models\EventEventTypeRel.cs" />
+    <Compile Include="Models\Info\Customer.cs" />
+    <Compile Include="Models\Info\OrderDetail.cs" />
+    <Compile Include="Models\Info\Order.cs" />
+    <Compile Include="Models\Info\TransactionLog.cs" />
+    <Compile Include="Models\Mapping\ChapterReportMap.cs" />
+    <Compile Include="Models\Mapping\EventEventTypeRelMap.cs" />
+    <Compile Include="Models\Mapping\EventReportMap.cs" />
+    <Compile Include="Models\Mapping\EventTypeMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupContextMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupContext_IndexMap.cs" />
+    <Compile Include="Models\Mapping\PendingRemovalMap.cs" />
+    <Compile Include="Models\Mapping\ReligionMap.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupContext_Index.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupContext.cs" />
+    <Compile Include="Models\MediaCorrespondenceContext_Index.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceContext_IndexMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedContext_IndexMap.cs" />
+    <Compile Include="Models\MediaPublishedContext_Index.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedContextMap.cs" />
+    <Compile Include="Models\MediaPublishedContext.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceContextMap.cs" />
+    <Compile Include="Models\MediaCorrespondenceContext.cs" />
+    <Compile Include="Models\DBAudit.cs" />
+    <Compile Include="Models\EventMediaAudioVideoRel.cs" />
+    <Compile Include="Models\EventMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\EventStatusHistory.cs" />
+    <Compile Include="Models\EventSubscriptionRel.cs" />
+    <Compile Include="Models\EventVehicleRel.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\GroupUser.cs" />
+    <Compile Include="Models\Mapping\AddressContactRelMap.cs" />
+    <Compile Include="Models\Mapping\AddressEventRelMap.cs" />
+    <Compile Include="Models\Mapping\AddressSubscriptionsRelMap.cs" />
+    <Compile Include="Models\Mapping\AudioVideoTypeMap.cs" />
+    <Compile Include="Models\Mapping\ChapterChapterRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterContactInfoRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterContactRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterMediaCorrespondenceRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterMediaPublishedRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterStatusHistoryMap.cs" />
+    <Compile Include="Models\Mapping\ChapterSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\ContactMediaCorrespondenceRelMap.cs" />
+    <Compile Include="Models\Mapping\ContactSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\DBAuditMap.cs" />
+    <Compile Include="Models\Mapping\EventMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\EventStatusHistoryMap.cs" />
+    <Compile Include="Models\Mapping\EventSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\GroupMap.cs" />
+    <Compile Include="Models\Mapping\GroupUserMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceCommentMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceEventRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceMediaCorrespondenceRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaCorrespondenceVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedCommentMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedEventRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedMediaCorrespondenceRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedMediaPublishedRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaPublishedVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupCommentMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaWebsiteEGroupVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\NewsSourceCommentMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationMediaCorrespondenceRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationMediaPublishedRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationStatusHistoryMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonMediaCorrespondenceRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonMediaPublishedRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonMediaWebsiteEGroupRelMap.cs" />
+    <Compile Include="Models\Mapping\SubscriptionCommentMap.cs" />
+    <Compile Include="Models\Mapping\SubscriptionMap.cs" />
+    <Compile Include="Models\Mapping\SubscriptionSubscriptionRelMap.cs" />
+    <Compile Include="Models\Mapping\SubscriptionVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\WebsiteGroupTypeMap.cs" />
+    <Compile Include="Models\Mapping\PublishedTypeMap.cs" />
+    <Compile Include="Models\Mapping\CorrespondenceTypeMap.cs" />
+    <Compile Include="Models\Mapping\ContactCommentMap.cs" />
+    <Compile Include="Models\Mapping\ContactContactRelMap.cs" />
+    <Compile Include="Models\Mapping\ContactInfoPersonRelMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Mapping\ContactMap.cs" />
+    <Compile Include="Models\Mapping\ContactMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\ContactTopicMap.cs" />
+    <Compile Include="Models\Mapping\ContactTypeMap.cs" />
+    <Compile Include="Models\Mapping\EventMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\EventVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\LibraryCategoryTypeMap.cs" />
+    <Compile Include="Models\Mapping\MediaAudioVideoCommentMap.cs" />
+    <Compile Include="Models\Mapping\MediaAudioVideoMap.cs" />
+    <Compile Include="Models\Mapping\MediaAudioVideoVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageCommentMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationOrganizationRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonContactRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonMediaAudioVideoRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonPersonRelMap.cs" />
+    <Compile Include="Models\Mapping\SearchMap.cs" />
+    <Compile Include="Models\MediaAudioVideoVehicleRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceEventRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceMediaAudioVideoRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceMediaCorrespondenceRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceMediaImageRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceSubscriptionRel.cs" />
+    <Compile Include="Models\MediaCorrespondenceVehicleRel.cs" />
+    <Compile Include="Models\MediaImageComment.cs" />
+    <Compile Include="Models\MediaImageMediaAudioVideoRel.cs" />
+    <Compile Include="Models\MediaImageMediaImageRel.cs" />
+    <Compile Include="Models\MediaImageMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\MediaImageSubscriptionRel.cs" />
+    <Compile Include="Models\MediaImageVehicleRel.cs" />
+    <Compile Include="Models\MediaPublishedEventRel.cs" />
+    <Compile Include="Models\MediaPublishedMediaAudioVideoRel.cs" />
+    <Compile Include="Models\MediaPublishedMediaCorrespondenceRel.cs" />
+    <Compile Include="Models\MediaPublishedMediaImageRel.cs" />
+    <Compile Include="Models\MediaPublishedMediaPublishedRel.cs" />
+    <Compile Include="Models\MediaPublishedMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\MediaPublishedSubscriptionRel.cs" />
+    <Compile Include="Models\MediaPublishedVehicleRel.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupMediaAudioVideoRel.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupSubscriptionRel.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupVehicleRel.cs" />
+    <Compile Include="Models\NewsSourceComment.cs" />
+    <Compile Include="Models\OrganizationMediaAudioVideoRel.cs" />
+    <Compile Include="Models\OrganizationMediaCorrespondenceRel.cs" />
+    <Compile Include="Models\OrganizationMediaPublishedRel.cs" />
+    <Compile Include="Models\OrganizationMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\OrganizationOrganizationRel.cs" />
+    <Compile Include="Models\OrganizationStatusHistory.cs" />
+    <Compile Include="Models\OrganizationSubscriptionRel.cs" />
+    <Compile Include="Models\OrganizationVehicleRel.cs" />
+    <Compile Include="Models\PendingRemoval.cs" />
+    <Compile Include="Models\PersonContactRel.cs" />
+    <Compile Include="Models\PersonMediaAudioVideoRel.cs" />
+    <Compile Include="Models\PersonMediaCorrespondenceRel.cs" />
+    <Compile Include="Models\PersonMediaPublishedRel.cs" />
+    <Compile Include="Models\PersonMediaWebsiteEGroupRel.cs" />
+    <Compile Include="Models\PersonPersonRel.cs" />
+    <Compile Include="Models\Religion.cs" />
+    <Compile Include="Models\Search.cs" />
+    <Compile Include="Models\EventEventRel.cs" />
+    <Compile Include="Models\EventMediaImageRel.cs" />
+    <Compile Include="Models\Mapping\ChapterEventRelMap.cs" />
+    <Compile Include="Models\Mapping\EventEventRelMap.cs" />
+    <Compile Include="Models\Mapping\EventMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationEventRelMap.cs" />
+    <Compile Include="Models\OrganizationEventRel.cs" />
+    <Compile Include="Models\DropdownChapter.cs" />
+    <Compile Include="Models\DropdownOrganization.cs" />
+    <Compile Include="Models\CorrespondenceType.cs" />
+    <Compile Include="Models\ActiveStatus.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\AddressChapterRel.cs" />
+    <Compile Include="Models\AddressPersonRel.cs" />
+    <Compile Include="Models\AddressType.cs" />
+    <Compile Include="Models\Alias.cs" />
+    <Compile Include="Models\AliasChapterRel.cs" />
+    <Compile Include="Models\AliasOrganizationRel.cs" />
+    <Compile Include="Models\AliasPersonRel.cs" />
+    <Compile Include="Models\ApprovalStatus.cs" />
+    <Compile Include="Models\BeholderPerson.cs" />
+    <Compile Include="Models\Chapter.cs" />
+    <Compile Include="Models\ChapterOrganizationRel.cs" />
+    <Compile Include="Models\ChapterPersonRel.cs" />
+    <Compile Include="Models\ChapterType.cs" />
+    <Compile Include="Models\CommonPerson.cs" />
+    <Compile Include="Models\ConfidentialityType.cs" />
+    <Compile Include="Models\ContactInfo.cs" />
+    <Compile Include="Models\ContactInfoPersonRel.cs" />
+    <Compile Include="Models\ContactInfoType.cs" />
+    <Compile Include="Models\DropdownPerson.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventComment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EventDocumentationType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EyeColor.cs" />
+    <Compile Include="Models\Gender.cs" />
+    <Compile Include="Models\HairColor.cs" />
+    <Compile Include="Models\HairPattern.cs" />
+    <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\ImageType.cs" />
+    <Compile Include="Models\LibraryCategoryType.cs" />
+    <Compile Include="Models\LicenseType.cs" />
+    <Compile Include="Models\Mapping\ActiveStatusMap.cs" />
+    <Compile Include="Models\Mapping\AddressChapterRelMap.cs" />
+    <Compile Include="Models\Mapping\AddressMap.cs" />
+    <Compile Include="Models\Mapping\AddressPersonRelMap.cs" />
+    <Compile Include="Models\Mapping\AddressTypeMap.cs" />
+    <Compile Include="Models\Mapping\AliasChapterRelMap.cs" />
+    <Compile Include="Models\Mapping\AliasMap.cs" />
+    <Compile Include="Models\Mapping\AliasOrganizationRelMap.cs" />
+    <Compile Include="Models\Mapping\AliasPersonRelMap.cs" />
+    <Compile Include="Models\Mapping\ApprovalStatusMap.cs" />
+    <Compile Include="Models\Mapping\BeholderPersonMap.cs" />
+    <Compile Include="Models\Mapping\ChapterMap.cs" />
+    <Compile Include="Models\Mapping\ChapterOrganizationRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterPersonRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterTypeMap.cs" />
+    <Compile Include="Models\Mapping\CommonPersonMap.cs" />
+    <Compile Include="Models\Mapping\ConfidentialityTypeMap.cs" />
+    <Compile Include="Models\Mapping\ContactInfoMap.cs" />
+    <Compile Include="Models\Mapping\ContactInfoTypeMap.cs" />
+    <Compile Include="Models\Mapping\ChapterMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\ChapterCommentMap.cs" />
+    <Compile Include="Models\Mapping\DropdownChapterMap.cs" />
+    <Compile Include="Models\Mapping\DropdownOrganizationMap.cs" />
+    <Compile Include="Models\Mapping\DropdownPersonMap.cs" />
+    <Compile Include="Models\Mapping\EventCommentMap.cs" />
+    <Compile Include="Models\Mapping\EventDocumentationTypeMap.cs" />
+    <Compile Include="Models\Mapping\EventMap.cs" />
+    <Compile Include="Models\Mapping\EyeColorMap.cs" />
+    <Compile Include="Models\Mapping\GenderMap.cs" />
+    <Compile Include="Models\Mapping\HairColorMap.cs" />
+    <Compile Include="Models\Mapping\HairPatternMap.cs" />
+    <Compile Include="Models\Mapping\ImageMap.cs" />
+    <Compile Include="Models\Mapping\ImageTypeMap.cs" />
+    <Compile Include="Models\Mapping\LicenseTypeMap.cs" />
+    <Compile Include="Models\Mapping\MaritialStatusMap.cs" />
+    <Compile Include="Models\Mapping\MediaImageMap.cs" />
+    <Compile Include="Models\Mapping\MediaTypeMap.cs" />
+    <Compile Include="Models\Mapping\MimeTypeMap.cs" />
+    <Compile Include="Models\Mapping\MovementClassMap.cs" />
+    <Compile Include="Models\Mapping\NewsSourceMap.cs" />
+    <Compile Include="Models\Mapping\NewsSourceTypeMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationCommentMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationPersonRelMap.cs" />
+    <Compile Include="Models\Mapping\OrganizationTypeMap.cs" />
+    <Compile Include="Models\Mapping\PersonCommentMap.cs" />
+    <Compile Include="Models\Mapping\PersonMediaImageRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonEventRelMap.cs" />
+    <Compile Include="Models\Mapping\PersonScreenNameMap.cs" />
+    <Compile Include="Models\Mapping\PersonVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\PrefixMap.cs" />
+    <Compile Include="Models\Mapping\PrimaryStatusMap.cs" />
+    <Compile Include="Models\Mapping\RaceMap.cs" />
+    <Compile Include="Models\Mapping\RelationshipTypeMap.cs" />
+    <Compile Include="Models\Mapping\RemovalStatusMap.cs" />
+    <Compile Include="Models\Mapping\RenewalPermmisionTypeMap.cs" />
+    <Compile Include="Models\Mapping\StateMap.cs" />
+    <Compile Include="Models\Mapping\SuffixMap.cs" />
+    <Compile Include="Models\Mapping\TagTypeMap.cs" />
+    <Compile Include="Models\Mapping\UserMap.cs" />
+    <Compile Include="Models\Mapping\UserTypeMap.cs" />
+    <Compile Include="Models\Mapping\VehicleColorMap.cs" />
+    <Compile Include="Models\Mapping\VehicleCommentMap.cs" />
+    <Compile Include="Models\Mapping\VehicleMakeMap.cs" />
+    <Compile Include="Models\Mapping\VehicleMap.cs" />
+    <Compile Include="Models\Mapping\VehicleModelMap.cs" />
+    <Compile Include="Models\Mapping\VehicleNewsSourceRelMap.cs" />
+    <Compile Include="Models\Mapping\VehicleTagMap.cs" />
+    <Compile Include="Models\Mapping\VehicleTypeMap.cs" />
+    <Compile Include="Models\Mapping\VehicleVehicleRelMap.cs" />
+    <Compile Include="Models\Mapping\WebIncidentTypeMap.cs" />
+    <Compile Include="Models\MaritialStatus.cs" />
+    <Compile Include="Models\MediaAudioVideo.cs" />
+    <Compile Include="Models\MediaAudioVideoComment.cs" />
+    <Compile Include="Models\MediaCorrespondence.cs" />
+    <Compile Include="Models\MediaCorrespondenceComment.cs" />
+    <Compile Include="Models\MediaImage.cs" />
+    <Compile Include="Models\MediaPublished.cs" />
+    <Compile Include="Models\MediaPublishedComment.cs" />
+    <Compile Include="Models\MediaType.cs" />
+    <Compile Include="Models\MediaWebsiteEGroup.cs" />
+    <Compile Include="Models\MediaWebsiteEGroupComment.cs" />
+    <Compile Include="Models\MimeType.cs" />
+    <Compile Include="Models\MovementClass.cs" />
+    <Compile Include="Models\NewsSource.cs" />
+    <Compile Include="Models\NewsSourceType.cs" />
+    <Compile Include="Models\Organization.cs" />
+    <Compile Include="Models\OrganizationComment.cs" />
+    <Compile Include="Models\OrganizationMediaImageRel.cs" />
+    <Compile Include="Models\OrganizationPersonRel.cs" />
+    <Compile Include="Models\OrganizationType.cs" />
+    <Compile Include="Models\PersonComment.cs" />
+    <Compile Include="Models\PersonMediaImageRel.cs" />
+    <Compile Include="Models\PersonEventRel.cs" />
+    <Compile Include="Models\PersonScreenName.cs" />
+    <Compile Include="Models\PersonVehicleRel.cs" />
+    <Compile Include="Models\Prefix.cs" />
+    <Compile Include="Models\PrimaryStatus.cs" />
+    <Compile Include="Models\PublishedType.cs" />
+    <Compile Include="Models\Race.cs" />
+    <Compile Include="Models\RelationshipType.cs" />
+    <Compile Include="Models\RemovalStatus.cs" />
+    <Compile Include="Models\RenewalPermmisionType.cs" />
+    <Compile Include="Models\State.cs" />
+    <Compile Include="Models\StateInfo.cs" />
+    <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\SubscriptionComment.cs" />
+    <Compile Include="Models\SubscriptionSubscriptionRel.cs" />
+    <Compile Include="Models\SubscriptionVehicleRel.cs" />
+    <Compile Include="Models\Suffix.cs" />
+    <Compile Include="Models\TagType.cs" />
+    <Compile Include="Models\Vehicle.cs" />
+    <Compile Include="Models\VehicleColor.cs" />
+    <Compile Include="Models\VehicleComment.cs" />
+    <Compile Include="Models\VehicleMake.cs" />
+    <Compile Include="Models\VehicleModel.cs" />
+    <Compile Include="Models\VehicleTag.cs" />
+    <Compile Include="Models\VehicleType.cs" />
+    <Compile Include="Models\VehicleVehicleRel.cs" />
+    <Compile Include="Models\WebIncidentType.cs" />
+    <Compile Include="Models\WebsiteGroupType.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\DateRangeAttribute.cs" />
+    <Compile Include="Validators\DobValidator.cs" />
+    <Compile Include="Validators\FutureDateAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Models\ve-7540.tmp" />
+    <None Include="packages.config" />
+    <None Include="UserClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Partials\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201509251512409_initial.resx">
+      <DependentUpon>201509251512409_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509251537073_datatypeconversion.resx">
+      <DependentUpon>201509251537073_datatypeconversion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509270225231_ChapterTableChange.resx">
+      <DependentUpon>201509270225231_ChapterTableChange.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" />
+  <!--<Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.13\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+   To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

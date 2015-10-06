@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Domain">
-      <HintPath>..\..\Beholder\Domain\bin\Debug\Domain.dll</HintPath>
+      <HintPath>..\..\Beholder2\Domain\bin\Debug\Domain.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -48,9 +48,8 @@
       <HintPath>..\packages\FluentConsole.0.8.3.0\lib\net35-Client\FluentConsole.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\splc.domain\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\Beholder2\Domain\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="splc.data">
       <HintPath>..\..\..\source\beholder\splc.data\bin\Debug\splc.data.dll</HintPath>
@@ -70,12 +69,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChapterEntityService.cs" />
+    <Compile Include="EventEntityService.cs" />
+    <Compile Include="MainEntityService.cs" />
+    <Compile Include="OrganizationEntityService.cs" />
     <Compile Include="ChapterService.cs" />
+    <Compile Include="EntityService.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="OrganizationService.cs" />
+    <Compile Include="PersonEntityService.cs" />
     <Compile Include="PersonService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicationEntityService.cs" />
+    <Compile Include="WebsiteEntityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

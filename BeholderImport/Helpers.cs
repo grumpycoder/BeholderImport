@@ -80,5 +80,14 @@ namespace BeholderImport
                 return db.Websites.Find(id);
             }
         }
+
+        //public static DocumentationType ConvertEventDocType(int? id = 0)
+        //{
+        //    //if (id != null)
+        //    //{
+        //    //    return null;
+        //    //}
+        //    //return null;
+        //}
     }
 }

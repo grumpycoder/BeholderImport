@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using Domain;
 using Domain.Models;
@@ -11,341 +12,531 @@ namespace BeholderImport
     {
         public static void LoadChapterRelationships()
         {
-            //            ChapterPeople();
-            //            ChapterWebsites();
-            //            ChapterCorrespondence();
-            //            ChapterEvents();
-            //            ChapterPublications();
-            //            ChapterSubscriptions();
-            //            ChapterAudioVideo();
-            //            ChapterImages();
-            //            ChapterAddresses();
-            //            ChapterAliases();
-            //            ChapterActivities();
-            //            ChapterComments();
+            //ChapterPeople();
+            //ChapterEvents();
+            //ChapterWebsites();
+            ChapterImages();
+            //ChapterAudioVideo();
+            //ChapterCorrespondence();
+            //ChapterSubscriptions();
+            //ChapterPublications();
+            //ChapterAliases();
+            //ChapterComments();
+            //ChapterActivities();
+            //ChapterAddresses();
         }
 
-        private static void ChapterComments()
+        private static void ChapterPeople(int? skip = 0, int? takecount = 0)
         {
-            var db = new ACDBContext();
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
-
+            var db = new ACDBContext();
             var count = 0;
-            var total = db.ChapterComments.OrderBy(x => x.Id).Skip(1000).Take(1000).Count();
-            w.Yellow.Line($"Adding {total} Chapter Comments to log entries");
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterPersonRels.Count();
+            var entityName = "Chapter-Person";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
             using (var context = new AppContext())
             {
-                foreach (var item in db.ChapterComments.OrderBy(x => x.Id).Skip(1000).Take(1000))
+                foreach (var item in db.ChapterPersonRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0).Include("BeholderPerson"))
                 {
-                    var chapter = context.Chapters.Find(item.ChapterId);
-
-                    if (chapter == null) continue;
-
-                    var log = chapter.LogEntries.Any(
-                        x => x.Note == item.Comment?.Trim());
-
-                    if (log == null) continue;
                     count++;
-                    chapter.LogEntries.Add(new ChapterLogEntry()
+                    var e = context.Persons.Find(item.BeholderPerson.CommonPersonId);
+                    var chapter = context.Chapters.Include(x => x.Persons).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
                     {
-                        Note = item.Comment,
-                    });
-
-                    w.Green.Line($"Adding {count} of {total} Comment LogEntry {item.Comment?.Substring(0, 15)}... to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Comments");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Comments");
-            }
-        }
-
-        private static void ChapterActivities()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-
-            var count = 0;
-            var total = db.ChapterStatusHistories.OrderBy(x => x.Id).Skip(1000).Take(1000).Count();
-            w.Yellow.Line($"Adding {total} Chapter Activity");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.ChapterStatusHistories.OrderBy(x => x.Id).Skip(1000).Take(1000))
-                {
-                    var chapter = context.Chapters.Find(item.ChapterId);
-
-                    if (chapter == null) continue;
-
-                    var activity = chapter.ChapterActivity.Any(
-                        x => x.ActiveYear == item.ActiveYear);
-
-                    if (activity == null) continue;
-                    count++;
-
-                    chapter.ChapterActivity.Add(new ChapterActivity()
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.Persons.Any(x => x.Id == e.Id))
                     {
-                        ActiveYear = item.ActiveYear,
-                    });
-
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Activity Year {item.ActiveYear}" });
-                    w.Green.Line($"Adding {count} of {total} Activity {item.ActiveYear} to {chapter.Name}");
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.FullName} already exists");
+                        continue;
+                    }
+                    chapter.Persons.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Person {e.ReverseFullName}" });
+                    e.LogEntries.Add(new PersonLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.ReverseFullName}");
+                    savedCount++;
                 }
-                w.Gray.Line($"Saving Activity");
+                w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
-                w.Green.Line($"Saved {count} Activities");
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        private static void ChapterPeople()
+        private static void ChapterEvents(int? skip = 0, int? takecount = 0)
         {
-            var db = new ACDBContext();
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
+            var db = new ACDBContext();
             var count = 0;
-            var total = db.ChapterPersonRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Person relationships");
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterEventRels.Count();
+            var entityName = "Chapter-Event";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
             using (var context = new AppContext())
             {
-                foreach (var item in db.ChapterPersonRels.Include("BeholderPerson"))
+                foreach (var item in db.ChapterEventRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
-                    var person = context.Persons.Find(item.BeholderPerson.CommonPersonId);
-                    var chapter =
-                        context.Chapters.Include(x => x.Persons).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (person == null || chapter == null) continue;
-                    if (chapter.Persons.Any(x => x.Id == person.Id)) continue;
                     count++;
-
-                    chapter.Persons.Add(person);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added person {person.ReverseFullName}" });
-                    person.LogEntries.Add(new PersonLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {person.FullName} to {chapter.Name}");
+                    var e = context.Events.Find(item.EventId);
+                    var chapter = context.Chapters.Include(x => x.Events).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.Events.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        continue;
+                    }
+                    chapter.Events.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Event {e.Name}" });
+                    e.LogEntries.Add(new EventLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    savedCount++;
                 }
-                w.Gray.Line($"Saving Relationships");
+                w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        private static void ChapterWebsites()
+        private static void ChapterWebsites(int? skip = 0, int? takecount = 0)
         {
-            var db = new ACDBContext();
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
+            var db = new ACDBContext();
             var count = 0;
-            var total = db.ChapterMediaWebsiteEGroupRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Website relationships");
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterMediaWebsiteEGroupRels.Count();
+            var entityName = "Chapter-Website";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
             using (var context = new AppContext())
             {
-                foreach (var item in db.ChapterMediaWebsiteEGroupRels)
+                foreach (var item in db.ChapterMediaWebsiteEGroupRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
-                    var website = context.Websites.Find(item.MediaWebsiteEGroupId);
-                    var chapter =
-                        context.Chapters.Include(x => x.Websites).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (website == null || chapter == null) continue;
-                    if (chapter.Websites.Any(x => x.Id == website.Id)) continue;
                     count++;
-                    chapter.Websites.Add(website);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added website {website.Name}" });
-                    website.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {website.Name} to {chapter.Name}");
+                    var e = context.Websites.Find(item.MediaWebsiteEGroupId);
+                    var chapter = context.Chapters.Include(x => x.Websites).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.Websites.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        continue;
+                    }
+                    chapter.Websites.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added website {e.Name}" });
+                    e.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    savedCount++;
                 }
-                w.Gray.Line($"Saving Relationships");
+                w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        private static void ChapterCorrespondence()
+        private static void ChapterImages(int? skip = 0, int? takecount = 0)
         {
-            var db = new ACDBContext();
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
+            var db = new ACDBContext();
             var count = 0;
-            var total = db.ChapterMediaCorrespondenceRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Correspondence relationships");
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterMediaImageRels.Count();
+            var entityName = "Chapter-Image";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
             using (var context = new AppContext())
             {
-                foreach (var item in db.ChapterMediaCorrespondenceRels)
+                foreach (var item in db.ChapterMediaImageRels.Where(x => x.Id >= 1 && x.Id < 4000).OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
-                    var corr = context.Correspondences.Find(item.MediaCorrespondenceId);
-                    var chapter =
-                        context.Chapters.Include(x => x.Correspondence).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (corr == null || chapter == null) continue;
-                    if (chapter.Correspondence.Any(x => x.Id == corr.Id)) continue;
                     count++;
-                    chapter.Correspondence.Add(corr);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Correspondence {corr.Name}" });
-                    corr.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {corr.Name} to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Relationships");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
-            }
-        }
-
-        private static void ChapterEvents()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-            var count = 0;
-            var total = db.ChapterEventRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Event relationships");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.ChapterEventRels)
-                {
-                    var @event = context.Events.Find(item.EventId);
-                    var chapter =
-                        context.Chapters.Include(x => x.Events).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (@event == null || chapter == null) continue;
-                    if (chapter.Events.Any(x => x.Id == @event.Id)) continue;
-                    count++;
-                    chapter.Events.Add(@event);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Event {@event.Name}" });
-                    @event.LogEntries.Add(new EventLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {@event.Name} to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Relationships");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
-            }
-        }
-
-        private static void ChapterPublications()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-            var count = 0;
-            var total = db.ChapterMediaPublishedRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Publications relationships");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.ChapterMediaPublishedRels)
-                {
-                    var e = context.Publications.Find(item.MediaPublishedId);
-                    var chapter =
-                        context.Chapters.Include(x => x.Publications).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (e == null || chapter == null) continue;
-                    if (chapter.Publications.Any(x => x.Id == e.Id)) continue;
-                    count++;
-                    chapter.Publications.Add(e);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Publication {e.Name}" });
-                    e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {e.Name} to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Relationships");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
-            }
-
-        }
-
-        private static void ChapterSubscriptions()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-            var count = 0;
-            var total = db.ChapterSubscriptionRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Subscriptions relationships");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.ChapterSubscriptionRels)
-                {
-                    var e = context.Subscriptions.Find(item.SubscriptionId);
-                    var chapter =
-                        context.Chapters.Include(x => x.Subscriptions).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (e == null || chapter == null) continue;
-                    if (chapter.Subscriptions.Any(x => x.Id == e.Id)) continue;
-                    count++;
-                    chapter.Subscriptions.Add(e);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Subscription {e.Name}" });
-                    e.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {e.Name} to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Relationships");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
-            }
-        }
-
-        private static void ChapterAudioVideo()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-            var count = 0;
-            var total = db.ChapterMediaAudioVideoRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Audio Video relationships");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.ChapterMediaAudioVideoRels)
-                {
-                    var e = context.AudioVideos.Find(item.MediaAudioVideoId);
-                    var chapter =
-                        context.Chapters.Include(x => x.AudioVideos).FirstOrDefault(x => x.Id == item.ChapterId);
-                    if (e == null || chapter == null) continue;
-                    if (chapter.AudioVideos.Any(x => x.Id == e.Id)) continue;
-                    count++;
-                    chapter.AudioVideos.Add(e);
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Audio Video {e.Title}" });
-                    e.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {e.Title} to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Relationships");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
-            }
-        }
-
-        private static void ChapterImages()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-            var count = 0;
-            var total = db.ChapterMediaImageRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Image relationships");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.ChapterMediaImageRels)
-                {
                     var e = context.MediaImages.Find(item.MediaImageId);
-                    var chapter =
-                        context.Chapters.Include(x => x.MediaImages).FirstOrDefault(x => x.Id == item.ChapterId);
-
-                    if (e == null || chapter == null) continue;
-                    if (chapter.MediaImages.Any(x => x.Id == e.Id)) continue;
-                    count++;
+                    var chapter = context.Chapters.Include(x => x.MediaImages).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.MediaImages.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Title} already exists");
+                        continue;
+                    }
                     chapter.MediaImages.Add(e);
                     chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Image {e.Title}" });
                     e.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added Chapter {chapter.Name}" });
-                    w.Green.Line($"Adding {count} of {total} {e.Title} to {chapter.Name}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Title}");
+                    savedCount++;
                 }
-                w.Gray.Line($"Saving Relationships");
+                w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        private static void ChapterAddresses()
+        private static void ChapterAudioVideo(int? skip = 0, int? takecount = 0)
         {
-            var db = new ACDBContext();
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
+            var db = new ACDBContext();
             var count = 0;
-            var total = db.AddressChapterRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Address relationships");
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterMediaAudioVideoRels.Count();
+            var entityName = "Chapter-AudioVideo";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
             using (var context = new AppContext())
             {
-                foreach (var item in db.AddressChapterRels)
+                foreach (var item in db.ChapterMediaAudioVideoRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
+                    count++;
+                    var e = context.AudioVideos.Find(item.MediaAudioVideoId);
+                    var chapter = context.Chapters.Include(x => x.AudioVideos).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.AudioVideos.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Title} already exists");
+                        continue;
+                    }
+                    chapter.AudioVideos.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Audio Video {e.Title}" });
+                    e.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Title}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterCorrespondence(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterMediaCorrespondenceRels.Count();
+            var entityName = "Chapter-Correspondence";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.ChapterMediaCorrespondenceRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
+                    var e = context.Correspondences.Find(item.MediaCorrespondenceId);
+                    var chapter = context.Chapters.Include(x => x.Correspondence).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.Correspondence.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        continue;
+                    }
+                    chapter.Correspondence.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Correspondence {e.Name}" });
+                    e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterSubscriptions(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterSubscriptionRels.Count();
+            var entityName = "Chapter-Subscription";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.ChapterSubscriptionRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
+                    var e = context.Subscriptions.Find(item.SubscriptionId);
+                    var chapter = context.Chapters.Include(x => x.Subscriptions).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.Subscriptions.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        continue;
+                    }
+                    chapter.Subscriptions.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Subscription {e.Name}" });
+                    e.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterPublications(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterMediaPublishedRels.Count();
+            var entityName = "Chapter-Publication";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.ChapterMediaPublishedRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
+                    var e = context.Publications.Find(item.MediaPublishedId);
+                    var chapter = context.Chapters.Include(x => x.Publications).FirstOrDefault(x => x.Id == item.ChapterId);
+                    if (e == null || chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    if (chapter.Publications.Any(x => x.Id == e.Id))
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        continue;
+                    }
+                    chapter.Publications.Add(e);
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Publication {e.Name}" });
+                    e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Chapter {chapter.Name}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterAliases(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.AliasChapterRels.Count();
+            var entityName = "Chapter-Alias";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.AliasChapterRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
                     var chapter = context.Chapters.Find(item.ChapterId);
 
-                    if (chapter == null) continue;
+                    if (chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    //todo: verify query
+                    var e = chapter.ChapterAliases.FirstOrDefault(x => x.Name == item.Alias.AliasName && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
+                    if (e == null)
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        continue;
+                    }
+                    chapter.ChapterAliases.Add(new ChapterAlias()
+                    {
+                        Name = item.Alias.AliasName,
+                        PrimaryStatus = (PrimaryStatus)item.PrimaryStatusId,
+                        DateCreated = item.DateCreated,
+                        DateUpdated = item.DateModified
+                    });
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Alias {item.Alias.AliasName}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
 
-                    var address = chapter.ChapterAddresses.Any(
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterComments(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterComments.Count();
+            var entityName = "Chapter-Comment";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.ChapterComments.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
+                    var comment = item.Comment.Length > 15 ? item.Comment?.Substring(0, 15) : item.Comment;
+                    var chapter = context.Chapters.Find(item.ChapterId);
+                    if (chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    var log = chapter.LogEntries.FirstOrDefault(x => x.Note == item.Comment?.Trim());
+                    if (log == null)
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{comment} already exists");
+                        continue;
+                    }
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = item.Comment });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{comment}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterActivities(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.ChapterStatusHistories.Count();
+            var entityName = "Chapter-Activity";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.ChapterStatusHistories.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
+                    var chapter = context.Chapters.Find(item.ChapterId);
+                    if (chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    var e = chapter.ChapterActivity.FirstOrDefault(x => x.ActiveYear == item.ActiveYear);
+                    if (e == null)
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.ActiveYear} already exists");
+                        continue;
+                    }
+                    chapter.ChapterActivity.Add(new ChapterActivity() { ActiveYear = item.ActiveYear });
+                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Activity Year {item.ActiveYear}" });
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.ActiveYear}");
+                    savedCount++;
+                }
+                w.Gray.Line($"Saving {entityName}s...");
+                context.SaveChanges();
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
+            }
+        }
+
+        private static void ChapterAddresses(int? skip = 0, int? takecount = 0)
+        {
+            var startTime = DateTime.Now;
+            var w = FluentConsole.Instance;
+            var db = new ACDBContext();
+            var count = 0;
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.AddressChapterRels.Count();
+            var entityName = "Chapter-Address";
+
+            w.White.Line($"Creating {takecount} {entityName}s");
+            using (var context = new AppContext())
+            {
+                foreach (var item in db.AddressChapterRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                {
+                    count++;
+                    var chapter = context.Chapters.Find(item.ChapterId);
+                    if (chapter == null)
+                    {
+                        w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
+                        continue;
+                    }
+                    //todo: verify query
+                    var e = chapter.ChapterAddresses.FirstOrDefault(
                         x => x.Street == item.Address.Address1?.Trim() &&
                              x.City == item.Address.City?.Trim() &&
                              x.StateId == item.Address.StateId &&
                              x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-
-                    if (address == null) continue;
-                    count ++; 
-
+                    if (e == null)
+                    {
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Street} already exists");
+                        continue;
+                    }
                     chapter.ChapterAddresses.Add(new ChapterAddress()
                     {
                         Street = item.Address.Address1?.Trim(),
@@ -361,52 +552,18 @@ namespace BeholderImport
                         DateCreated = item.DateCreated,
                         DateUpdated = item.DateModified
                     });
-
                     chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Address {item.Address.Address1}" });
-                    w.Green.Line($"Adding {count} of {total} {item.Address.Address1} to {chapter.Name}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Street}");
+                    savedCount++;
                 }
-                w.Gray.Line($"Saving Relationships");
+                w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
+
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        private static void ChapterAliases()
-        {
-            var db = new ACDBContext();
-            var w = FluentConsole.Instance;
-
-            var count = 0;
-            var total = db.AliasChapterRels.Count();
-            w.Yellow.Line($"Adding {total} Chapter-Alias relationships");
-            using (var context = new AppContext())
-            {
-                foreach (var item in db.AliasChapterRels)
-                {
-                    var chapter = context.Chapters.Find(item.ChapterId);
-
-                    if (chapter == null) continue;
-
-                    var alias = chapter.ChapterAliases.Any(
-                        x => x.Name == item.Alias.AliasName && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-
-                    if (alias == null) continue;
-
-                    chapter.ChapterAliases.Add(new ChapterAlias()
-                    {
-                        Name = item.Alias.AliasName,
-                        PrimaryStatus = (PrimaryStatus)item.PrimaryStatusId,
-                        DateCreated = item.DateCreated,
-                        DateUpdated = item.DateModified
-                    });
-
-                    chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Alias {item.Alias.AliasName}" });
-                    w.Green.Line($"Adding {count} of {total} {item.Alias.AliasName} to {chapter.Name}");
-                }
-                w.Gray.Line($"Saving Relationships");
-                context.SaveChanges();
-                w.Green.Line($"Saved {count} Relationships");
-            }
-        }
     }
 }

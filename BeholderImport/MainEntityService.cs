@@ -10,24 +10,33 @@ namespace BeholderImport
 {
     public partial class EntityService
     {
-        public static void LoadOrganizations(int? takecount = 0)
+        public static void LoadOrganizations(int? skip = 0, int? takecount = 0)
         {
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
-            var totalAdded = 0;
+            var count = 0;
+            var savedCount = 0;
             if (takecount == 0) takecount = db.Organizations.Count();
+            var entityName = "Organization";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Organizations ON");
-                    w.White.Line($"Creating {db.Organizations.Take(takecount ?? 0).Count()} Organizations");
-                    foreach (var item in db.Organizations.Take(takecount ?? 0))
+                    w.White.Line($"Creating {takecount} {entityName}s");
+                    foreach (var item in db.Organizations.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                     {
+                        count++;
                         var i = context.Organizations.Find(item.Id);
-                        if (i != null) continue;
-                        totalAdded++;
-                        var org = new Domain.Models.Organization()
+                        if (i != null)
+                        {
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
+                            continue;
+                        }
+
+                        var newItem = new Domain.Models.Organization()
                         {
                             Id = item.Id,
                             Name = item.OrganizationName?.Trim(),
@@ -39,40 +48,49 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified
                         };
-                        org.LogEntries.Add(new OrganizationLogEntry() { Note = $"Added Organization {org.Name}" });
-                        context.Organizations.Add(org);
+                        newItem.LogEntries.Add(new OrganizationLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
+                        context.Organizations.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Organizations");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Organizations OFF");
                     trans.Commit();
                 }
             }
-            w.Green.Line($"Saved {totalAdded} new Organizations");
+            var totalTime = DateTime.Now - startTime;
+            w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
             w.White.Line(new String('-', 15));
         }
 
-        public static void OrganizationChapters(int? takecount = 0)
+        public static void LoadChapters(int? skip = 0, int? takecount = 0)
         {
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
+            var savedCount = 0;
             if (takecount == 0) takecount = db.Chapters.Count();
-            var total = db.Chapters.Take(takecount ?? 0).Count();
+            var entityName = "Chapter";
 
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Chapters ON");
-                    w.White.Line($"Creating {takecount} Chapters");
+                    w.White.Line($"Creating {takecount} {entityName}s");
 
-                    foreach (var item in db.Chapters.Take(takecount ?? 0))
+                    foreach (var item in db.Chapters.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                     {
-                        var i = context.Chapters.Find(item.Id);
-                        if (i != null) continue;
                         count++;
-                        var chapter = new Domain.Models.Chapter()
+                        var i = context.Chapters.Find(item.Id);
+                        if (i != null)
+                        {
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
+                            continue;
+                        }
+                        var newItem = new Domain.Models.Chapter()
                         {
                             Id = item.Id,
                             Name = item.ChapterName?.Trim(),
@@ -86,91 +104,54 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified
                         };
-                        chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added chapter {chapter.Name}" });
-                        w.Cyan.Line($"Creating {chapter.Name} ({count} of {total})");
-                        context.Chapters.Add(chapter);
+                        newItem.LogEntries.Add(new ChapterLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
+                        context.Chapters.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Chapters");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Chapters OFF");
                     trans.Commit();
                 }
-                w.Green.Line($"Saved {count} new Chapters");
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
                 w.White.Line(new String('-', 15));
             }
         }
 
-        public static void LoadAliases(int? takecount = 0)
-        {
-            var w = FluentConsole.Instance;
-            var db = new ACDBContext();
-            var count = 0;
-            if (takecount == 0) takecount = db.Aliases.Count();
-            var total = db.Aliases.Take(takecount ?? 0).Count();
-            using (var context = new AppContext())
-            {
-                using (var trans = context.Database.BeginTransaction())
-                {
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Aliases ON");
-                    w.White.Line($"Creating {takecount} Aliases");
-
-                    foreach (var item in db.Aliases.Take(takecount ?? 0))
-                    {
-                        var i = context.Aliases.Find(item.Id);
-                        if (i != null) continue;
-                        count++;
-                        var alias = new Domain.Models.Alias()
-                        {
-                            Id = item.Id,
-                            Name = item.AliasName?.Trim(),
-                            DateCreated = item.DateCreated,
-                            DateUpdated = item.DateModified
-                        };
-                        w.Cyan.Line($"Creating {alias.Name} ({count} of {total})");
-                        context.Aliases.Add(alias);
-                    }
-                    w.Gray.Line($"Saving Aliases");
-                    context.SaveChanges();
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Aliases OFF");
-                    trans.Commit();
-                }
-                w.Green.Line($"Saved {count} new Aliases");
-                w.White.Line(new String('-', 15));
-            }
-        }
-
-        public static void LoadPeople(int? takecount = 0)
+        public static void LoadPeople(int? skip = 0, int? takecount = 0)
         {
             var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
             var savedCount = 0;
-            if (takecount == 0) takecount = db.Chapters.Count();
-            var total = db.BeholderPersons.Where(p => p.OrganizationPersonRels.Any()).OrderBy(x => x.Id).Skip(6000).Take(2000).Count();
-            //            var total = db.BeholderPersons.Take(takecount ?? 0).Count();
+            if (takecount == 0) takecount = db.BeholderPersons.Count();
+            var entityName = "Person";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Persons ON");
-                    w.White.Line($"Creating {total} People");
+                    w.White.Line($"Creating {takecount} {entityName}s");
 
-                    //                    foreach (var item in db.BeholderPersons.Take(takecount ?? 0).Include("CommonPerson"))
-                    foreach (var item in db.BeholderPersons.Where(p => p.OrganizationPersonRels.Any()).OrderBy(x => x.Id).Skip(6000).Take(2000).Include("CommonPerson"))
-                    {count++;
+                    foreach (var item in db.BeholderPersons.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0).Include("CommonPerson"))
+                    {
+                        count++;
                         var i = context.Persons.Find(item.CommonPersonId);
                         if (i != null)
                         {
-                            w.Red.Line($"Adding Person {count} of {total}: Person {i.FullName} already exists");
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.FullName} already exists");
                             continue;
                         }
-                        
+
                         Gender gender;
                         Enum.TryParse(item.CommonPerson.GenderId.ToString(), out gender);
                         MaritialStatus maritialStatus;
                         Enum.TryParse(item.CommonPerson.MaritialStatusId.ToString(), out maritialStatus);
-                        var person = new Person()
+                        var newItem = new Person()
                         {
                             Id = item.CommonPersonId,
                             PrefixId = item.CommonPerson.PrefixId,
@@ -201,47 +182,50 @@ namespace BeholderImport
                             DateCreated = item.CommonPerson.DateCreated,
                             DateUpdated = item.CommonPerson.DateModified,
                         };
-                        person.LogEntries.Add(new PersonLogEntry() { Note = $"Added person {person.ReverseFullName}" });
-                        w.Green.Line($"Adding {count} of {total} Person {person.ReverseFullName}");
-                        savedCount ++;
-                        context.Persons.Add(person);
+                        newItem.LogEntries.Add(new PersonLogEntry() { Note = $"Added {entityName} {newItem.ReverseFullName}" });
+                        context.Persons.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.FullName}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving People");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Persons OFF");
                     trans.Commit();
                 }
-                TimeSpan totalTime = DateTime.Now - startTime;
-                w.Green.Line($"Saved {savedCount} People in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
-                w.White.Line(new string('-', 15));
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        public static void LoadAudioVideo(int? takecount = 0)
+        public static void LoadAudioVideo(int? skip = 0, int? takecount = 0)
         {
             var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
             var savedCount = 0;
-            if (takecount == 0) takecount = db.Organizations.Count();
-            var total = db.MediaAudioVideos.Take(takecount ?? 0).Count();
+            if (takecount == 0) takecount = db.MediaAudioVideos.Count();
+            var entityName = "AudioVideo";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT AudioVideos ON");
-                    w.White.Line($"Creating {db.MediaAudioVideos.Count()} Audio Video");
-                    foreach (var item in db.MediaAudioVideos.Take(takecount ?? 0))
-                    {    count++;
+                    w.White.Line($"Creating {takecount} {entityName}s");
+
+                    foreach (var item in db.MediaAudioVideos.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                    {
+                        count++;
                         var i = context.AudioVideos.Find(item.Id);
                         if (i != null)
                         {
-                            w.Red.Line($"Adding Audio Video {count} of {total}: {i.Title} already exists");
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Title} already exists");
                             continue;
                         }
-                    
-                        var audioVideo = new AudioVideo()
+
+                        var newItem = new AudioVideo()
                         {
                             Id = item.Id,
                             Title = item.Title?.Trim(),
@@ -261,45 +245,50 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified,
                         };
-                        audioVideo.LogEntries.Add(new AudioVideoLogEntry()
-                        {
-                            Note = $"Added audio video {audioVideo.Title}"
-                        });
-                        w.Cyan.Line($"Creating {audioVideo.Title} ({count} of {total})");
-                        context.AudioVideos.Add(audioVideo);
+                        newItem.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added {entityName} {newItem.Title}" });
+                        context.AudioVideos.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Title}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Audio Videos");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT AudioVideos OFF");
                     trans.Commit();
                 }
-                TimeSpan totalTime = DateTime.Now - startTime;
-                w.Green.Line($"Saved {savedCount} Audio Video in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
-                w.White.Line(new string('-', 15));
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
         public static void LoadCorrespondence(int? takecount = 0)
         {
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
+            var savedCount = 0;
             if (takecount == 0) takecount = db.MediaCorrespondences.Count();
+            var entityName = "Correspondence";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
-                    var total = db.MediaCorrespondences.Take(takecount ?? 0).Count();
-                    w.White.Line($"Creating {takecount} Correspondence");
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Correspondences ON");
+                    w.White.Line($"Creating {takecount} {entityName}s");
 
                     foreach (var item in db.MediaCorrespondences.Take(takecount ?? 0))
                     {
-                        context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Correspondences ON");
-                        var i = context.Correspondences.Find(item.Id);
-                        if (i != null) continue;
-
                         count++;
-                        var correspondence = new Correspondence()
+                        var i = context.Correspondences.Find(item.Id);
+                        if (i != null)
+                        {
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
+                            continue;
+                        }
+
+                        var newItem = new Correspondence()
                         {
                             Id = item.Id,
                             Name = item.CorrespondenceName?.Trim(),
@@ -317,57 +306,59 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified
                         };
-                        correspondence.LogEntries.Add(new CorrespondenceLogEntry()
-                        {
-                            Note = $"Added correspondence {correspondence.Name}"
-                        });
-                        w.Cyan.Line($"Creating {correspondence.Name} ({count} of {total})");
-                        context.Correspondences.Add(correspondence);
+                        newItem.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
+                        context.Correspondences.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Correspondences");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Correspondences OFF");
                     trans.Commit();
-                    w.Green.Line($"Saved {count} Correspondences");
-                    w.White.Line(new string('-', 15));
                 }
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
 
         }
 
-        public static void LoadEvents(int? takecount = 0)
+        public static void LoadEvents(int? skip = 0, int? takecount = 0)
         {
             var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
-            if (takecount == 0) takecount = db.Events.Count();
-            var total = db.Events.Take(takecount ?? 0).Count();
             var count = 0;
             var savedCount = 0;
+            if (takecount == 0) takecount = db.Events.Count();
+            var entityName = "Event";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
-                    w.White.Line($"Creating {db.Events.Take(takecount ?? 0).Count()} Events");
-                    foreach (var item in db.Events.Where(x => x.OrganizationEventRels.Any()).Take(takecount ?? 0))
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Events ON");
+                    w.White.Line($"Creating {takecount} {entityName}s");
+
+                    foreach (var item in db.Events.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                     {
                         count++;
-                        context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Events ON");
                         var i = context.Events.Find(item.Id);
                         if (i != null)
                         {
-                            w.Red.Line($"Adding Event {count} of {total}: {i.Name} already exists");
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
                             continue;
                         }
-                        
-                        var @event = new Domain.Models.Event()
+
+                        var newItem = new Domain.Models.Event()
                         {
                             Id = item.Id,
                             Name = item.EventName?.Trim(),
                             Summary = item.Summary?.Trim(),
                             SecurityLevel =
                                 item.ConfidentialityTypeId == 1 ? SecurityLevel.EyesOnly : SecurityLevel.Open,
-                            DocumentationType = (DocumentationType)item.EventDocumentationTypeId,
+                            //                            DocumentationType = (DocumentationType)item.EventDocumentationTypeId,
+                            //                            DocumentationType = Helpers.ConvertEventDocType(item.EventDocumentationTypeId),
                             //todo: EventType
                             //                        EventType = 
                             Movement = Helpers.ConvertMovementId(item.MovementClassId),
@@ -375,48 +366,50 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified
                         };
+                        newItem.LogEntries.Add(new EventLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
+                        context.Events.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
-                        @event.LogEntries.Add(new EventLogEntry() { Note = $"Added event {@event.Name}" });
-                        w.Cyan.Line($"Creating {@event.Name} ({count} of {total})");
-                        context.Events.Add(@event);
                     }
-
-                    w.Gray.Line($"Saving Events");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Events OFF");
                     trans.Commit();
-                    TimeSpan totalTime = DateTime.Now - startTime;
-                    w.Green.Line($"Saved {savedCount} Events in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
-                    w.White.Line(new string('-', 15));
                 }
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        public static void LoadImages(int? takecount = 0)
+        public static void LoadImages(int? skip = 0, int? takecount = 0)
         {
             var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
             var savedCount = 0;
-            if (takecount == 0) takecount = db.Events.Count();
-            var total = db.MediaImages.Take(takecount ?? 0).Count();
+            if (takecount == 0) takecount = db.MediaImages.Count();
+            var entityName = "Image";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
-                    w.White.Line($"Creating {total} MediaImages");
-                    foreach (var item in db.MediaImages.Where(x => x.OrganizationMediaImageRels.Any()).Take(takecount ?? 0))
-                    {     count++;
-                        context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MediaImages ON");
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MediaImages ON");
+                    w.White.Line($"Creating {takecount} {entityName}s");
+
+                    foreach (var item in db.MediaImages.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                    {
+                        count++;
                         var i = context.MediaImages.Find(item.Id);
                         if (i != null)
                         {
-                            w.Red.Line($"Adding Image {count} of {total}: {i.Title} already exists");
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Title} already exists");
                             continue;
                         }
-                        
-                        var mediaImage = new Domain.Models.MediaImage()
+
+                        var newItem = new Domain.Models.MediaImage()
                         {
                             Id = item.Id,
                             Title = item.ImageTitle?.Trim(),
@@ -437,42 +430,50 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified,
                         };
-                        mediaImage.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added image {mediaImage.Title}" });
-                        savedCount ++;
-                        w.Cyan.Line($"Creating {mediaImage.Title} ({count} of {total})");
-                        context.MediaImages.Add(mediaImage);
+                        newItem.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added {entityName} {newItem.Title}" });
+                        context.MediaImages.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Title}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Images");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT MediaImages OFF");
                     trans.Commit();
-                    TimeSpan totalTime = DateTime.Now - startTime;
-                    w.Green.Line($"Saved {savedCount} Images in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
-                    w.White.Line(new string('-', 15));
                 }
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        public static void LoadPublications(int? takecount = 0)
+        public static void LoadPublications(int? skip = 0, int? takecount = 0)
         {
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
-            if (takecount == 0) takecount = db.Events.Count();
-            var total = db.MediaPublisheds.Take(takecount ?? 0).Count();
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.MediaPublisheds.Count();
+            var entityName = "Publication";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
-                    w.White.Line($"Creating {total} Publications");
-                    foreach (var item in db.MediaPublisheds.Take(takecount ?? 0))
-                    {
-                        context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Publications ON");
-                        var i = context.Publications.Find(item.Id);
-                        if (i != null) continue;
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Publications ON");
+                    w.White.Line($"Creating {takecount} {entityName}s");
 
+                    foreach (var item in db.MediaPublisheds.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                    {
                         count++;
-                        var publication = new Publication()
+                        var i = context.Publications.Find(item.Id);
+                        if (i != null)
+                        {
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
+                            continue;
+                        }
+
+                        var newItem = new Publication()
                         {
                             Id = item.Id,
                             Name = item.Name,
@@ -491,40 +492,50 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified
                         };
-                        publication.LogEntries.Add(new PublicationLogEntry() { Note = $"Added publication {publication.Name}" });
-                        w.Cyan.Line($"Creating {publication.Name} ({count} of {total})");
-                        context.Publications.Add(publication);
+                        newItem.LogEntries.Add(new PublicationLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
+                        context.Publications.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Publication");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Publications OFF");
                     trans.Commit();
-                    w.Green.Line($"Saved {count} Publications");
-                    w.White.Line(new string('-', 15));
                 }
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        public static void LoadSubscriptions(int? takecount = 0)
+        public static void LoadSubscriptions(int? skip = 0, int? takecount = 0)
         {
+            var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
             var db = new ACDBContext();
             var count = 0;
-            if (takecount == 0) takecount = db.Events.Count();
+            var savedCount = 0;
+            if (takecount == 0) takecount = db.Subscriptions.Count();
+            var entityName = "Subscription";
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
-                    var total = db.Subscriptions.Take(takecount ?? 0).Count();
-                    w.White.Line($"Creating {total} Subscriptions");
-                    foreach (var item in db.Subscriptions.Take(takecount ?? 0))
-                    {
-                        context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Subscriptions ON");
-                        var i = context.Subscriptions.Find(item.Id);
-                        if (i != null) continue;
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Subscriptions ON");
+                    w.White.Line($"Creating {takecount} {entityName}s");
 
+                    foreach (var item in db.Subscriptions.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
+                    {
                         count++;
-                        var subscription = new Domain.Models.Subscription()
+                        var i = context.Subscriptions.Find(item.Id);
+                        if (i != null)
+                        {
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
+                            continue;
+                        }
+
+                        var newItem = new Domain.Models.Subscription()
                         {
                             Id = item.Id,
                             Name = item.PublicationName?.Trim(),
@@ -533,21 +544,23 @@ namespace BeholderImport
                             DateCreated = item.DateCreated,
                             DateUpdated = item.DateModified
                         };
-                        subscription.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added subscription {subscription.Name}" });
-                        w.Cyan.Line($"Creating {subscription.Name} ({count} of {total})");
-                        context.Subscriptions.Add(subscription);
+                        newItem.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
+                        context.Subscriptions.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Subscriptions");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Subscriptions OFF");
                     trans.Commit();
-                    w.Green.Line($"Saved {count} Subscriptions");
-                    w.White.Line(new string('-', 15));
                 }
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 
-        public static void LoadWebsites(int? takecount = 0)
+        public static void LoadWebsites(int? skip = 0, int? takecount = 0)
         {
             var startTime = DateTime.Now;
             var w = FluentConsole.Instance;
@@ -555,24 +568,27 @@ namespace BeholderImport
             var count = 0;
             var savedCount = 0;
             if (takecount == 0) takecount = db.MediaWebsiteEGroups.Count();
+            var entityName = "Website";
+
+
             using (var context = new AppContext())
             {
                 using (var trans = context.Database.BeginTransaction())
                 {
-                    var total = db.MediaWebsiteEGroups.Take(takecount ?? 0).Count();
-                    w.White.Line($"Creating {total} Websites");
-                    foreach (var item in db.MediaWebsiteEGroups.Take(takecount ?? 0))
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Websites ON");
+                    w.White.Line($"Creating {takecount} {entityName}s");
+
+                    foreach (var item in db.MediaWebsiteEGroups.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                     {
                         count++;
-                        context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Websites ON");
                         var i = context.Websites.Find(item.Id);
                         if (i != null)
                         {
-                            w.Red.Line($"Adding Website {count} of {total}: Website already exists");
+                            w.Yellow.Line($"Adding {entityName} {count} of {takecount}: {entityName} {i.Name} already exists");
                             continue;
                         }
-                        
-                        var website = new Website()
+
+                        var newItem = new Website()
                         {
                             Id = item.Id,
                             Name = item.Name,
@@ -588,19 +604,19 @@ namespace BeholderImport
                             DateUpdated = item.DateModified
                         };
 
-                        savedCount ++;
-                        website.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added website {website.Name}" });
-                        w.Green.Line($"Adding {count} of {total} Website {website.Name}");
-                        context.Websites.Add(website);
+                        newItem.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added website {newItem.Name}" });
+                        context.Websites.Add(newItem);
+                        w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
+                        savedCount++;
                     }
-                    w.Gray.Line($"Saving Websites");
+                    w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Websites OFF");
                     trans.Commit();
-                    TimeSpan totalTime = DateTime.Now - startTime;
-                    w.Green.Line($"Saved {savedCount} Websites in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
-                    w.White.Line(new string('-', 15));
                 }
+                var totalTime = DateTime.Now - startTime;
+                w.Green.Line($"Saved {savedCount} {entityName}s in {totalTime.Hours}:{totalTime.Minutes}:{totalTime.Seconds} ");
+                w.White.Line(new String('-', 15));
             }
         }
 

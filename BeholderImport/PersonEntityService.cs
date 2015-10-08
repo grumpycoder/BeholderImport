@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Domain;
 using Domain.Models;
 using Domain.Models.Enums;
@@ -11,16 +12,16 @@ namespace BeholderImport
     {
         public static void LoadPersonRelationships()
         {
-            //PersonEvents();
-            //PersonWebsites();
-            //PersonImages();
-            //PersonAudioVideos();
-            //PersonCorrespondences();
-            //PersonPublications();
-            //PersonAliases();
-            //PersonOnlineAliases();
-            //PersonComments();
-            //PersonAddresses();
+            //PersonEvents(0, 100);
+            //PersonWebsites(0, 100);
+            //PersonImages(0, 500);
+            //PersonAudioVideos(0, 100);
+            PersonCorrespondences(500, 0);
+            //PersonPublications(0, 500);
+            //PersonAliases(0, 10);
+            //PersonOnlineAliases(0, 10);
+            //PersonComments(0, 500);
+            //PersonAddresses(0, 50);
         }
 
         private static void PersonEvents(int? skip = 0, int? takecount = 0)
@@ -40,7 +41,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Events.Find(item.EventId);
-                    var person = context.Persons.FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
+                    var person = context.Persons.Include("Events").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (e == null || person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -57,6 +58,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new EventLogEntry() { Note = $"Added Chapter {person.ReverseFullName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -84,7 +86,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Websites.Find(item.MediaWebsiteEGroupId);
-                    var person = context.Persons.FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
+                    var person = context.Persons.Include("Websites").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (e == null || person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -100,6 +102,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added Person {person.FullName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -128,13 +131,13 @@ namespace BeholderImport
                     count++;
                     var e = context.MediaImages.Find(item.MediaImageId);
                     //todo: verify query personid is right one
-                    var person = context.Persons.FirstOrDefault(x => x.Id == item.PersonId);
+                    var person = context.Persons.Include("MediaImages").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (e == null || person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    if (person.MediaImages.Any(x => x.Id == e.Id))
+                    if (person.MediaImages.Any(x => x.Id == item.MediaImageId))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{e.Title} already exists");
                         continue;
@@ -144,6 +147,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added Chapter {person.FullName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -171,7 +175,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.AudioVideos.Find(item.MediaAudioVideoId);
-                    var person = context.Persons.FirstOrDefault(x => x.Id == item.PersonId);
+                    var person = context.Persons.Include("AudioVideos").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (e == null || person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -187,6 +191,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added Chapter {person.FullName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -214,13 +219,14 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Correspondences.Find(item.MediaCorrespondenceId);
-                    var person = context.Persons.FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
+                    //todo: change to correspondences
+                    var person = context.Persons.Include("Correspondence").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (e == null || person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    if (person.Correspondence.Any(x => x.Id == e.Id))
+                    if (person.Correspondence.Any(x => x.Id == item.MediaCorrespondenceId))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{e.Name} already exists");
                         continue;
@@ -230,6 +236,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Person {person.FullName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -257,7 +264,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Publications.Find(item.MediaPublishedId);
-                    var person = context.Persons.FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
+                    var person = context.Persons.Include("Publications").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (e == null || person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -273,6 +280,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Person {person.FullName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -299,17 +307,16 @@ namespace BeholderImport
                 foreach (var item in db.AliasPersonRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var person = context.Persons.Find(item.PersonId);
+                    var person = context.Persons.Include("PersonAliases").FirstOrDefault(x => x.Id == item.PersonId);
                     if (person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
                     //todo: verify query
-                    var e = person.PersonAliases.FirstOrDefault(x => x.Name == item.Alias.AliasName && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-                    if (e == null)
+                    if (person.PersonAliases.Any(x => x.Name?.Trim() == item.Alias.AliasName?.Trim() && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId))
                     {
-                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{e.Name} already exists");
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{item.Alias.AliasName} already exists");
                         continue;
                     }
                     person.PersonAliases.Add(new PersonAlias()
@@ -320,8 +327,9 @@ namespace BeholderImport
                         DateUpdated = item.DateModified
                     });
                     person.LogEntries.Add(new PersonLogEntry() { Note = $"Added Alias {item.Alias.AliasName}" });
-                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Name}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{item.Alias.AliasName}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -348,14 +356,14 @@ namespace BeholderImport
                 foreach (var item in db.PersonScreenNames.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var person = context.Persons.Find(item.BeholderPerson.CommonPersonId);
+                    var person = context.Persons.Include("OnlineAlias").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (person == null)
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{item.ScreenName} already exists");
                         continue;
                     }
-                    var alias = person.OnlineAlias.FirstOrDefault(x => x.ScreenName == item.ScreenName && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-                    if (alias == null)
+                    //todo: change to onlinealiases
+                    if (person.OnlineAlias.Any(x => x.ScreenName == item.ScreenName?.Trim() && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{item.ScreenName} already exists");
                         continue;
@@ -370,6 +378,7 @@ namespace BeholderImport
                     person.LogEntries.Add(new PersonLogEntry() { Note = $"Added Online Alias {item.ScreenName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{item.ScreenName}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -397,14 +406,13 @@ namespace BeholderImport
                 {
                     count++;
                     var comment = item.Comment.Length > 15 ? item.Comment?.Substring(0, 15) : item.Comment;
-                    var person = context.Persons.Find(item.BeholderPerson.CommonPersonId);
+                    var person = context.Persons.Include("LogEntries").FirstOrDefault(x => x.Id == item.BeholderPerson.CommonPersonId);
                     if (person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    var log = person.LogEntries.FirstOrDefault(x => x.Note == item.Comment?.Trim());
-                    if (log == null)
+                    if (person.LogEntries.Any(x => x.Note == item.Comment?.Trim()))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{comment} already exists");
                         continue;
@@ -412,6 +420,7 @@ namespace BeholderImport
                     person.LogEntries.Add(new PersonLogEntry() { Note = item.Comment });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{comment}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -437,21 +446,20 @@ namespace BeholderImport
                 foreach (var item in db.AddressPersonRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var person = context.Persons.Find(item.CommonPerson.Id);
+                    var person = context.Persons.Include("PersonAddresses").FirstOrDefault(x => x.Id == item.CommonPerson.Id);
                     if (person == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
                     //todo: verify query
-                    var e = person.PersonAddresses.FirstOrDefault(
+                    if (person.PersonAddresses.Any(
                         x => x.Street == item.Address.Address1?.Trim() &&
                              x.City == item.Address.City?.Trim() &&
                              x.StateId == item.Address.StateId &&
-                             x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-                    if (e == null)
+                             x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId))
                     {
-                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{e.Street} already exists");
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {person.ReverseFullName}-{item.Address.Address1} already exists");
                         continue;
                     }
                     person.PersonAddresses.Add(new PersonAddress()
@@ -470,8 +478,9 @@ namespace BeholderImport
                         DateUpdated = item.DateModified
                     });
                     person.LogEntries.Add(new PersonLogEntry() { Note = $"Added Address {item.Address.Address1}" });
-                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{e.Street}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {person.ReverseFullName}-{item.Address.Address1}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();

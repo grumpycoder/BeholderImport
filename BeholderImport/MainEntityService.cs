@@ -52,6 +52,7 @@ namespace BeholderImport
                         context.Organizations.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -108,6 +109,7 @@ namespace BeholderImport
                         context.Chapters.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -186,6 +188,7 @@ namespace BeholderImport
                         context.Persons.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.FullName}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -249,6 +252,7 @@ namespace BeholderImport
                         context.AudioVideos.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Title}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -310,6 +314,7 @@ namespace BeholderImport
                         context.Correspondences.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -370,6 +375,7 @@ namespace BeholderImport
                         context.Events.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -434,6 +440,7 @@ namespace BeholderImport
                         context.MediaImages.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Title}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -494,11 +501,13 @@ namespace BeholderImport
                         };
                         newItem.LogEntries.Add(new PublicationLogEntry() { Note = $"Added {entityName} {newItem.Name}" });
                         context.Publications.Add(newItem);
+                        context.SaveChanges();
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
-                    context.SaveChanges();
+                    //context.SaveChanges();
                     context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Publications OFF");
                     trans.Commit();
                 }
@@ -548,6 +557,7 @@ namespace BeholderImport
                         context.Subscriptions.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();
@@ -608,6 +618,7 @@ namespace BeholderImport
                         context.Websites.Add(newItem);
                         w.Green.Line($"Adding {count} of {takecount} {entityName}: {newItem.Name}");
                         savedCount++;
+                        context.SaveChanges();
                     }
                     w.Gray.Line($"Saving {entityName}s...");
                     context.SaveChanges();

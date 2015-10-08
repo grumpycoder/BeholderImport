@@ -73,12 +73,9 @@
     <Compile Include="EventEntityService.cs" />
     <Compile Include="MainEntityService.cs" />
     <Compile Include="OrganizationEntityService.cs" />
-    <Compile Include="ChapterService.cs" />
     <Compile Include="EntityService.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="OrganizationService.cs" />
     <Compile Include="PersonEntityService.cs" />
-    <Compile Include="PersonService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicationEntityService.cs" />

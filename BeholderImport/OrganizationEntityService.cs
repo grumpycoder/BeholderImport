@@ -58,6 +58,7 @@ namespace BeholderImport
                     chapter.Organization = org;
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{org.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -102,6 +103,7 @@ namespace BeholderImport
                     person.LogEntries.Add(new PersonLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{person.ReverseFullName}");
                     savedCount++;
+                    context.SaveChanges();
 
                 }
                 w.Gray.Line($"Saving {entityName}s...");
@@ -146,6 +148,7 @@ namespace BeholderImport
                     @event.LogEntries.Add(new EventLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{@event.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -179,7 +182,7 @@ namespace BeholderImport
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    if (org.Websites.Where(x => x.Id == website.Id).Any())
+                    if (org.Websites.Any(x => x.Id == website.Id))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {org.Name}-{website.Name} already exists");
                         continue;
@@ -189,6 +192,7 @@ namespace BeholderImport
                     website.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{website.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -232,6 +236,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -275,6 +280,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -318,6 +324,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -361,6 +368,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -404,6 +412,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Organization {org.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -430,7 +439,7 @@ namespace BeholderImport
                 foreach (var item in db.AliasOrganizationRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var org = context.Organizations.Find(item.OrganizationId);
+                    var org = context.Organizations.Include(x => x.OrganizationAliases).FirstOrDefault(x => x.Id == item.OrganizationId);
                     if (org == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -452,6 +461,7 @@ namespace BeholderImport
                     org.LogEntries.Add(new OrganizationLogEntry() { Note = $"Added Alias {item.Alias.AliasName}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{item.Alias.AliasName}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -479,7 +489,7 @@ namespace BeholderImport
                 {
                     count++;
                     var comment = item.Comment.Length > 15 ? item.Comment?.Substring(0, 15) : item.Comment;
-                    var org = context.Organizations.Find(item.OrganizationId);
+                    var org = context.Organizations.Include(x => x.LogEntries).FirstOrDefault(x => x.Id == item.OrganizationId);
                     if (org == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -498,6 +508,7 @@ namespace BeholderImport
                     });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{comment}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -524,7 +535,7 @@ namespace BeholderImport
                 foreach (var item in db.OrganizationStatusHistories.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var org = context.Organizations.Find(item.OrganizationId);
+                    var org = context.Organizations.Include(x => x.OrganizationActivity).FirstOrDefault(x => x.Id == item.OrganizationId);
 
                     if (org == null)
                     {
@@ -545,6 +556,7 @@ namespace BeholderImport
                     org.LogEntries.Add(new OrganizationLogEntry() { Note = $"Added Activity Year {item.ActiveYear}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {org.Name}-{item.ActiveYear}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();

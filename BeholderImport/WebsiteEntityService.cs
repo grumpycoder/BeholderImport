@@ -31,7 +31,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Correspondences.Find(item.MediaCorrespondenceId);
-                    var website = context.Websites.Find(item.MediaWebsiteEGroupId);
+                    var website = context.Websites.Include("Correspondences").FirstOrDefault(x => x.Id == item.MediaWebsiteEGroupId);
                     if (e == null || website == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -47,6 +47,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Website {website.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {website.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -74,7 +75,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Publications.Find(item.MediaPublishedId);
-                    var website = context.Websites.Find(item.MediaWebsiteEGroupId);
+                    var website = context.Websites.Include("Publications").FirstOrDefault(x => x.Id == item.MediaWebsiteEGroupId);
                     if (e == null || website == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -90,6 +91,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Website {website.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {website.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
 
                 var totalTime = DateTime.Now - startTime;

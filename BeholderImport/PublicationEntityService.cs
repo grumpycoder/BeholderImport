@@ -11,8 +11,8 @@ namespace BeholderImport
     {
         public static void LoadPublicationRelationships()
         {
-            //PublicationSubscriptions();
-            //PublicationCorrespondences();
+            PublicationSubscriptions();
+            PublicationCorrespondences();
 
         }
 
@@ -33,8 +33,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Subscriptions.Find(item.SubscriptionId);
-                    var pub =
-                        context.Publications.Include(x => x.Subscriptions).FirstOrDefault(x => x.Id == item.MediaPublishedId);
+                    var pub = context.Publications.Include(x => x.Subscriptions).FirstOrDefault(x => x.Id == item.MediaPublishedId);
                     if (e == null || pub == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -50,6 +49,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added Publication {pub.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {pub.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -84,6 +84,7 @@ namespace BeholderImport
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
+                    //todo: change to correspondences
                     if (pub.Correspondence.Any(x => x.Id == e.Id))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {pub.Name}-{e.Name} already exists");
@@ -94,6 +95,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Publication {pub.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {pub.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();

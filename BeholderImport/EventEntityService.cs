@@ -12,12 +12,12 @@ namespace BeholderImport
     {
         public static void LoadEventRelationships()
         {
-            //EventImages();
-            //EventAudioVideos();
+            //EventImages(0, 10);
+            //EventAudioVideos(0, 10);
             //EventCorrespondences();
             //EventPublications();
             //EventComments();
-            //EventAddresses();
+            //EventAddresses(0, 50);
         }
 
         private static void EventImages(int? skip = 0, int? takecount = 0)
@@ -37,7 +37,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.MediaImages.Find(item.MediaImageId);
-                    var @event = context.Events.Find(item.EventId);
+                    var @event = context.Events.Include("MediaImages").FirstOrDefault(x => x.Id == item.EventId);
                     if (e == null || @event == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -54,6 +54,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added Event {@event.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {@event.Name}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -80,7 +81,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.AudioVideos.Find(item.MediaAudioVideoId);
-                    var @event = context.Events.Find(item.EventId);
+                    var @event = context.Events.Include("AudioVideos").FirstOrDefault(x => x.Id == item.EventId);
                     if (e == null || @event == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -96,6 +97,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added Event {@event.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {@event.Name}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -122,7 +124,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Correspondences.Find(item.MediaCorrespondenceId);
-                    var @event = context.Events.Find(item.EventId);
+                    var @event = context.Events.Include("Correspondences").FirstOrDefault(x => x.Id == item.EventId);
                     if (e == null || @event == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -138,6 +140,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Event {@event.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {@event.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -164,7 +167,7 @@ namespace BeholderImport
                 {
                     count++;
                     var e = context.Publications.Find(item.MediaPublishedId);
-                    var @event = context.Events.Find(item.EventId);
+                    var @event = context.Events.Include("Publications").FirstOrDefault(x => x.Id == item.EventId);
                     if (e == null || @event == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
@@ -180,6 +183,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Event {@event.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {@event.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -207,14 +211,13 @@ namespace BeholderImport
                 {
                     count++;
                     var comment = item.Comment.Length > 15 ? item.Comment?.Substring(0, 15) : item.Comment;
-                    var @event = context.Chapters.Find(item.EventId);
+                    var @event = context.Chapters.Include("LogEntries").FirstOrDefault(x => x.Id == item.EventId);
                     if (@event == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    var log = @event.LogEntries.FirstOrDefault(x => x.Note == item.Comment?.Trim());
-                    if (log == null)
+                    if (@event.LogEntries.Any(x => x.Note == item.Comment?.Trim()))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {@event.Name}-{comment} already exists");
                         continue;
@@ -222,6 +225,7 @@ namespace BeholderImport
                     @event.LogEntries.Add(new ChapterLogEntry() { Note = item.Comment });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {@event.Name}-{comment}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -247,19 +251,16 @@ namespace BeholderImport
                 foreach (var item in db.AddressEventRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var @event = context.Events.Find(item.EventId);
+                    var @event = context.Events.Include("EventAddresses").FirstOrDefault(x => x.Id == item.EventId);
                     if (@event == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    var address = @event.EventAddresses.FirstOrDefault(
-                        x => x.Street == item.Address.Address1?.Trim() &&
+                    if (@event.EventAddresses.Any(x => x.Street == item.Address.Address1?.Trim() &&
                              x.City == item.Address.City?.Trim() &&
                              x.StateId == item.Address.StateId &&
-                             x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-
-                    if (address == null)
+                             x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {@event.Name}-{item.Address.Address1} already exists");
                         continue;
@@ -283,6 +284,7 @@ namespace BeholderImport
                     @event.LogEntries.Add(new EventLogEntry() { Note = $"Added Address {item.Address.Address1}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {@event.Name}-{item.Address.Address1}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();

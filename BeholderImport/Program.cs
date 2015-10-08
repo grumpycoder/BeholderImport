@@ -15,13 +15,13 @@ namespace BeholderImport
             //EntityService.LoadCorrespondence();
             //EntityService.LoadEvents();
             //EntityService.LoadImages();
-            //EntityService.LoadPublications();
+            //EntityService.LoadPublications(90000, 10000);
             //EntityService.LoadSubscriptions();
             //EntityService.LoadWebsites();
 
             //EntityService.LoadOrganizationRelationships();
-            EntityService.LoadChapterRelationships();
-            //EntityService.LoadPersonRelationships();
+            //EntityService.LoadChapterRelationships();
+            EntityService.LoadPersonRelationships();
             //EntityService.LoadEventRelationships();
             //EntityService.LoadWebsiteRelationships();
             //EntityService.LoadPublicationRelationships();

@@ -15,7 +15,7 @@ namespace BeholderImport
             //ChapterPeople();
             //ChapterEvents();
             //ChapterWebsites();
-            ChapterImages();
+            //ChapterImages();
             //ChapterAudioVideo();
             //ChapterCorrespondence();
             //ChapterSubscriptions();
@@ -59,6 +59,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new PersonLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.ReverseFullName}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -102,6 +103,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new EventLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -145,6 +147,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new WebsiteLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -188,6 +191,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new MediaImageLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -231,6 +235,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new AudioVideoLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Title}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -274,6 +279,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new CorrespondenceLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -317,6 +323,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new SubscriptionLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -360,6 +367,7 @@ namespace BeholderImport
                     e.LogEntries.Add(new PublicationLogEntry() { Note = $"Added Chapter {chapter.Name}" });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -386,7 +394,7 @@ namespace BeholderImport
                 foreach (var item in db.AliasChapterRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var chapter = context.Chapters.Find(item.ChapterId);
+                    var chapter = context.Chapters.Include(x => x.ChapterAliases).FirstOrDefault(x => x.Id == item.ChapterId);
 
                     if (chapter == null)
                     {
@@ -394,10 +402,9 @@ namespace BeholderImport
                         continue;
                     }
                     //todo: verify query
-                    var e = chapter.ChapterAliases.FirstOrDefault(x => x.Name == item.Alias.AliasName && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-                    if (e == null)
+                    if (chapter.ChapterAliases.Any(x => x.Name == item.Alias.AliasName && x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId))
                     {
-                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Name} already exists");
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{item.Alias.AliasName} already exists");
                         continue;
                     }
                     chapter.ChapterAliases.Add(new ChapterAlias()
@@ -408,8 +415,9 @@ namespace BeholderImport
                         DateUpdated = item.DateModified
                     });
                     chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Alias {item.Alias.AliasName}" });
-                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Name}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{item.Alias.AliasName}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -437,14 +445,13 @@ namespace BeholderImport
                 {
                     count++;
                     var comment = item.Comment.Length > 15 ? item.Comment?.Substring(0, 15) : item.Comment;
-                    var chapter = context.Chapters.Find(item.ChapterId);
+                    var chapter = context.Chapters.Include(x => x.LogEntries).FirstOrDefault(x => x.Id == item.ChapterId);
                     if (chapter == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    var log = chapter.LogEntries.FirstOrDefault(x => x.Note == item.Comment?.Trim());
-                    if (log == null)
+                    if (chapter.LogEntries.Any(x => x.Note == item.Comment?.Trim()))
                     {
                         w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{comment} already exists");
                         continue;
@@ -452,6 +459,7 @@ namespace BeholderImport
                     chapter.LogEntries.Add(new ChapterLogEntry() { Note = item.Comment });
                     w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{comment}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -478,22 +486,22 @@ namespace BeholderImport
                 foreach (var item in db.ChapterStatusHistories.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var chapter = context.Chapters.Find(item.ChapterId);
+                    var chapter = context.Chapters.Include(x => x.ChapterActivity).FirstOrDefault(x => x.Id == item.ChapterId);
                     if (chapter == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    var e = chapter.ChapterActivity.FirstOrDefault(x => x.ActiveYear == item.ActiveYear);
-                    if (e == null)
+                    if (chapter.ChapterActivity.Any(x => x.ActiveYear == item.ActiveYear))
                     {
-                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.ActiveYear} already exists");
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{item.ActiveYear} already exists");
                         continue;
                     }
                     chapter.ChapterActivity.Add(new ChapterActivity() { ActiveYear = item.ActiveYear });
                     chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Activity Year {item.ActiveYear}" });
-                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.ActiveYear}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{item.ActiveYear}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
@@ -520,21 +528,18 @@ namespace BeholderImport
                 foreach (var item in db.AddressChapterRels.OrderBy(x => x.Id).Skip(skip ?? 0).Take(takecount ?? 0))
                 {
                     count++;
-                    var chapter = context.Chapters.Find(item.ChapterId);
+                    var chapter = context.Chapters.Include(x => x.ChapterAddresses).FirstOrDefault(x => x.Id == item.ChapterId);
                     if (chapter == null)
                     {
                         w.Red.Line($"Error {entityName} {count} of {takecount}: {entityName} not found");
                         continue;
                     }
-                    //todo: verify query
-                    var e = chapter.ChapterAddresses.FirstOrDefault(
-                        x => x.Street == item.Address.Address1?.Trim() &&
+                    if (chapter.ChapterAddresses.Any(x => x.Street == item.Address.Address1?.Trim() &&
                              x.City == item.Address.City?.Trim() &&
                              x.StateId == item.Address.StateId &&
-                             x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId);
-                    if (e == null)
+                             x.PrimaryStatus == (PrimaryStatus)item.PrimaryStatusId))
                     {
-                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{e.Street} already exists");
+                        w.Yellow.Line($"Warning {entityName} {count} of {takecount}: {entityName} {chapter.Name}-{item.Address.Address1} already exists");
                         continue;
                     }
                     chapter.ChapterAddresses.Add(new ChapterAddress()
@@ -553,8 +558,9 @@ namespace BeholderImport
                         DateUpdated = item.DateModified
                     });
                     chapter.LogEntries.Add(new ChapterLogEntry() { Note = $"Added Address {item.Address.Address1}" });
-                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{e.Street}");
+                    w.Green.Line($"Adding {count} of {takecount} {entityName}: {chapter.Name}-{item.Address.Address1}");
                     savedCount++;
+                    context.SaveChanges();
                 }
                 w.Gray.Line($"Saving {entityName}s...");
                 context.SaveChanges();
